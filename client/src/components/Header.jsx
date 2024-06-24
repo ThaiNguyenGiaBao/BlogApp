@@ -7,9 +7,9 @@ function Header() {
   const path = useLocation().pathname;
   return (
     <Navbar className="border-b-2 ">
-      <Link to="/" className="self-center text-sm sm: text-xl font-semibold ">
+      <Link to="/" className="self-center text-sm sm: text-xl font-bold ">
         <span className="px-2 py-1 rounded-lg text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-          Bao's
+          BaoTN's
         </span>
         Blog
       </Link>
@@ -38,13 +38,13 @@ function Header() {
       </div>
 
       <Navbar.Collapse>
-        <Navbar.Link active={path == "/"} as={"div"}>
+        <Navbar.Link active={path === "/"} as={"div"}>
           <Link to="/">Home</Link>
         </Navbar.Link>
-        <Navbar.Link active={path == "/projects"} as={"div"}>
+        <Navbar.Link active={path === "/projects"} as={"div"}>
           <Link to="/projects">Projects</Link>
         </Navbar.Link>
-        <Navbar.Link active={path == "/about"} as={"div"}>
+        <Navbar.Link active={path === "/about"} as={"div"}>
           <Link to="/about">About</Link>
         </Navbar.Link>
       </Navbar.Collapse>
