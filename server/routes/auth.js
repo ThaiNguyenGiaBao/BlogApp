@@ -36,7 +36,7 @@ route.post("/signin", async (req, res) => {
   const user = users.find((user) => user.email === req.body.email);
 
   if (user == null) {
-    return res.status(404).send("User not found");
+    return res.send("User not found");
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
