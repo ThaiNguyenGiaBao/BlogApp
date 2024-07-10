@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Label, Navbar, TextInput } from "flowbite-react";
 import { useState } from "react";
 import axios from "axios";
+import OAuth from "../components/OAuth";
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -38,8 +39,8 @@ function SignUp() {
 
   return (
     <div className="min-h-screen mt-20 ">
-      <div className="flex max-w-3xl px-5 mx-auto flex-col md:flex-row md:items-center">
-        <div className="flex-1">
+      <div className="flex max-w-3xl px-5 mx-auto flex-col md:flex-row ">
+        <div className="flex-1 mt-24">
           <Link to="/" className="self-center text-4xl font-bold ">
             <span className="px-2 py-1 rounded-lg text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
               BaoTN's
@@ -77,7 +78,7 @@ function SignUp() {
             <Button gradientDuoTone="purpleToPink" type="submit">
               Sign Up
             </Button>
-            <Button type="button">Continue with Google</Button>
+            <OAuth></OAuth>
             <p>
               Already have an account?{" "}
               <Link to="/signin" className="t">

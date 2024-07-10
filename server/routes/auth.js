@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const route = express.Router();
 const User = require("../models/user");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 route.post("/signup", async (req, res) => {
   const users = await User.find();
@@ -40,17 +40,48 @@ route.post("/signin", async (req, res) => {
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-        
-        res.status(200).cookie('token', token, {
-            httpOnly: true,
-        }).json("Login success");
-    
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const { password: pass, ...others } = user._doc;
+      res
+        .status(200)
+        .cookie("token", token, {
+          httpOnly: true,
+        })
+        .json(others);
     } else {
       res.send("Incorrect password");
     }
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+
+route.post("/oauth", async (req, res) => {
+  const { email, username, avatar } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (user==null) {
+      const genPassword = Math.random().toString(36).slice(-8);
+      const hashPassword = await bcrypt.hash(genPassword, 10);
+      user = new User({
+        username,
+        email,
+        avatar,
+        password: hashPassword,
+      });
+      await user.save();
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const { password: pass, ...others } = user._doc;
+    res
+      .status(200)
+      .cookie("token", token, {
+        httpOnly: true,
+      })
+      .json(others);
+  } catch (err) {
+    console.log(err);
   }
 });
 

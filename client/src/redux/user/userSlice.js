@@ -1,4 +1,4 @@
-import createSlice from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
     name: 'user',
@@ -18,7 +18,6 @@ const userSlice = createSlice({
         signInFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;
-            state.user = null;
         }
     }
 })
