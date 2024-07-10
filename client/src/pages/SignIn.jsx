@@ -78,7 +78,7 @@ function SignIn() {
               onChange={handleChange}
             ></TextInput>
             <Button gradientDuoTone="purpleToPink" type="submit">
-              Sign Up
+              Sign In
             </Button>
             <OAuth />
             <p>

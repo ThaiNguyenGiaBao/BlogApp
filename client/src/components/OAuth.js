@@ -25,6 +25,7 @@ function OAuth() {
         .then((res) => {
           console.log(res.data);
           dispatch(signInSuccess(res.data));
+          navigate("/");
         })
         .catch((err) => {
           dispatch(signInFailure(err.message));
