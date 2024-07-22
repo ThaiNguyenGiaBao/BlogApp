@@ -18,7 +18,6 @@ function SignIn() {
   });
   const dispatch = useDispatch();
   const { error: err } = useSelector((state) => state.user || {});
-  console.log(err)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
@@ -37,7 +36,7 @@ function SignIn() {
         if (res.data.username != null) {
           navigate("/");
           console.log(res.data);
-          signInSuccess(res.data);
+          dispatch(signInSuccess(res.data));
         } else {
           //console.log(res.data);
           dispatch(signInFailure(res.data));
