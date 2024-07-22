@@ -1,15 +1,25 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
+import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
 
 function Header() {
   const path = useLocation().pathname;
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user || {});
+  const dispatch = useDispatch();
+
+  const theme = useSelector((state) => state.theme.theme);
+
+  const handleToggleTheme = () => {
+    dispatch(toggleTheme());
+  };
+
   return (
     <Navbar className="border-b-2 ">
-      <Link to="/" className="self-center text-sm sm: text-xl font-bold ">
+      <Link to="/" className="self-center text-sm sm:text-xl font-bold ">
         <span className="px-2 py-1 rounded-lg text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
           BaoTN's
         </span>
@@ -28,8 +38,8 @@ function Header() {
       </Button>
 
       <div className="flex gap-2 md:order-2">
-        <Button className="h-10" color="gray" pill>
-          <FaMoon />
+        <Button className="h-10" color="gray" pill onClick={handleToggleTheme}>
+          {theme == "dark" ? <FaMoon /> : <FaSun />}
         </Button>
         {user ? (
           <Dropdown
@@ -37,10 +47,12 @@ function Header() {
             arrowIcon={false}
             label={<Avatar alt="user" img={user.avatar} rounded></Avatar>}
           >
-            <Dropdown.Header className="font-semibold">{user.username}</Dropdown.Header>
-            <Dropdown.Item>
-              <Link to="/dashboard?tab=profile">Profile</Link>
-            </Dropdown.Item>
+            <Dropdown.Header className="font-semibold">
+              {user.username}
+            </Dropdown.Header>
+            <Link to="/dashboard?tab=profile">
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
             <Dropdown.Item>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (

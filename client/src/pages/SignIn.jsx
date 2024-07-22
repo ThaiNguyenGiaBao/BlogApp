@@ -17,7 +17,8 @@ function SignIn() {
     password: "",
   });
   const dispatch = useDispatch();
-  const { error: err } = useSelector((state) => state.user);
+  const { error: err } = useSelector((state) => state.user || {});
+  console.log(err)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
