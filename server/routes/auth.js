@@ -40,9 +40,10 @@ route.post("/signin", async (req, res) => {
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
       const { password: pass, ...others } = user._doc;
       others.token = token;
+      console.log(others);
       res
         .status(200)
         .cookie("token", token, {
@@ -73,7 +74,7 @@ route.post("/oauth", async (req, res) => {
       await user.save();
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
     const { password: pass, ...others } = user._doc;
     res
       .status(200)

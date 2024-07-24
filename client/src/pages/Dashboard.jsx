@@ -155,7 +155,7 @@ function Dashboard() {
               hidden
             />
             <img
-              src={imgUrl || user && user.avatar}
+              src={imgUrl || (user && user.avatar)}
               alt="user"
               className="w-40 h-40 rounded-full mb-4 object-cover hover:cursor-pointer border-4 border-gray-300 dark:border-gray-700"
               onClick={() => fileRef.current.click()}
@@ -216,9 +216,16 @@ function Dashboard() {
                 </Modal.Footer>
               </form>
             </Modal>
-            <button type="button" onClick={handleSignOut}>
+            {!user.isAdmin&& <Button
+              onClick={() => {
+                window.location.href = "/create-post";
+              }}
+            >
+              Create Post
+            </Button>}
+            <Button type="button" onClick={handleSignOut}>
               Sign Out
-            </button>
+            </Button>
           </div>
         </div>
       )}

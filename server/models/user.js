@@ -18,12 +18,17 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: "",
+      default: "https://firebasestorage.googleapis.com/v0/b/blog-f3876.appspot.com/o/1721822691465de.jpg?alt=media&token=527c7ec9-a533-4a31-baf1-f23e8aedc8ab",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    }
   },
   {
     timestamps: true,
   }
+  
 );
 
 module.exports = mongoose.model("User", userSchema);
