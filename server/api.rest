@@ -1,3 +1,5 @@
+
+### 
 POST http://localhost:3001/signin
 Content-Type: application/json
 
@@ -15,4 +17,14 @@ Content-Type: application/json
     "username": "giabao123",
     "email": "bao@gmail.com",
     "password": "123"
+}
+
+### Create post
+POST http://localhost:3001/post/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y2ExZWQyM2QyNGE5ZTRmMCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMTgzMjg1MH0.wqCtnvyf31sSwWbSsp37aXNwTuhAb5SyuQRTn4Zm5io
+
+{
+    "title": "Post1",
+    "content": "Content1"
 }

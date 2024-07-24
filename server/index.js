@@ -3,8 +3,10 @@ const { default: mongoose } = require("mongoose");
 const dotenv = require("dotenv");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
+const post = require("./routes/post");
 const cookies = require("cookie-parser");
 const cors = require("cors");
+const User = require("./models/user");
 
 dotenv.config();
 
@@ -25,8 +27,18 @@ db.once("open", function () {
   console.log("Connected to MongoDB");
 });
 
+async function updateAdmin() {
+  await User.findOneAndUpdate(
+    { username: "giabao1234" }, // find user by username
+    { $set: { isAdmin: true } }, // update isAdmin to true
+    { new: true } // return the updated document
+  );
+}
+updateAdmin();
+
 app.use("/", authRoute);
 app.use("/user", userRoute);
+app.use("/post", post);
 
 app.listen(3001, () => {
   console.log("Server is running on port 3001");

@@ -33,7 +33,7 @@ function Dashboard() {
   const fileRef = useRef();
 
   const user = useSelector((state) => state.user.user);
-
+  console.log(user);
   const dispatch = useDispatch();
 
   const handleUpdateFile = (e) => {
@@ -106,6 +106,10 @@ function Dashboard() {
       window.location.href = "/signin";
     });
   };
+
+  const handleCreatePost = () => {
+    
+  }
 
   useEffect(() => {
     const search = new URLSearchParams(location.search);
@@ -216,7 +220,7 @@ function Dashboard() {
                 </Modal.Footer>
               </form>
             </Modal>
-            {!user.isAdmin&& <Button
+            {user.isAdmin&& <Button
               onClick={() => {
                 window.location.href = "/create-post";
               }}
