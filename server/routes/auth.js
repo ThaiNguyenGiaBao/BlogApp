@@ -42,6 +42,7 @@ route.post("/signin", async (req, res) => {
     if (await bcrypt.compare(req.body.password, user.password)) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...others } = user._doc;
+      others.token = token;
       res
         .status(200)
         .cookie("token", token, {

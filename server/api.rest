@@ -2,16 +2,17 @@ POST http://localhost:3001/signin
 Content-Type: application/json
 
 {
-    "email": "thai@g.com",
+    "email": "bao@gmail.com",
     "password": "123"
 }
 
 
 ### Update User
-PUT http://localhost:3001/user/update/668e4b716165ed3e67f8de24
+PUT http://localhost:3001/user/update/669fcb36ca1ed23d24a9e4f0
 Content-Type: application/json
 
 {
-    "username": "New Name",
-    "email": "newemail@example.com"
+    "username": "giabao123",
+    "email": "bao@gmail.com",
+    "password": "123"
 }

@@ -10,6 +10,7 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import OAuth from "../components/OAuth";
+import { useEffect } from "react";
 
 function SignIn() {
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ function SignIn() {
     password: "",
   });
   const dispatch = useDispatch();
-  const { error: err } = useSelector((state) => state.user || {});
+  const { error: err } = useSelector((state) => state.user);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
@@ -31,12 +32,13 @@ function SignIn() {
     axios
       .post("http://localhost:3001/signin", formData)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         dispatch(signInStart());
         if (res.data.username != null) {
           navigate("/");
           console.log(res.data);
           dispatch(signInSuccess(res.data));
+          localStorage.setItem('token', res.data.token);
         } else {
           //console.log(res.data);
           dispatch(signInFailure(res.data));
@@ -46,6 +48,9 @@ function SignIn() {
         dispatch(signInFailure(err.message));
       });
   };
+  useEffect(() => {
+    dispatch(signInFailure(null));
+  }, []);
 
   return (
     <div className="min-h-screen mt-20 ">

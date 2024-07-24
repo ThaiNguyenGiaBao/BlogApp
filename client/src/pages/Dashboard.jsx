@@ -12,6 +12,9 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { TextInput } from "flowbite-react";
+import axios from "axios";
+import { updateSuccess, updateFailure } from "../redux/user/userSlice";
+import Cookies from "js-cookie";
 
 function Dashboard() {
   const location = useLocation();
@@ -24,18 +27,19 @@ function Dashboard() {
     username: "",
     email: "",
     password: "",
+    avatar: "",
   });
   const [openModal, setOpenModal] = useState(false);
-
   const fileRef = useRef();
 
   const user = useSelector((state) => state.user.user);
+
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
     //dispatch(signOut());
   };
-  const handleUpdate = (e) => {
+  const handleUpdateFile = (e) => {
     const file = e.target.files[0];
     if (file) {
       setFile(file);
@@ -43,21 +47,10 @@ function Dashboard() {
     }
   };
   const handleUploadImage = (file) => {
-    //     rules_version = '2';
-    // service firebase.storage {
-    //   match /b/{bucket}/o {
-    //     match /{allPaths=**} {
-    //       allow read;
-    //       allow write: if
-    //       request.resource.size < 4 * 1024*1024 &&
-    //       request.resource.contentType.matches('image/.*')
-    //     }
-    //   }
-    // }
     const storage = getStorage(app);
     const filename = new Date().getTime() + file.name;
     const storageRef = ref(storage, filename);
-    const uploadTask = uploadBytesResumable(storageRef, filename);
+    const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -75,14 +68,35 @@ function Dashboard() {
       () => {
         // Handle successful uploads on complete
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          //console.log('File available at', downloadURL);
-          setImgDownload(downloadURL);
+          console.log("File available at", downloadURL);
+          setFormData({ ...formData, avatar: downloadURL });
         });
       }
     );
   };
   const handleInfoChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+  const handleUpdate = async () => {
+    console.log(formData);
+    const token = localStorage.getItem("token");
+    // const token = req.cookies.token;
+    // console.log(token);
+    axios
+      .put(`http://localhost:3001/user/update/${user._id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true, // Include credentials in the request
+      })
+      .then((res) => {
+        console.log(res.data);
+        dispatch(updateSuccess(res.data));
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(updateFailure(err.message));
+      });
   };
   useEffect(() => {
     const search = new URLSearchParams(location.search);
@@ -100,7 +114,6 @@ function Dashboard() {
     setFormData({
       username: user.username,
       email: user.email,
-      password: user.password,
     });
   }, [user]);
 
@@ -128,7 +141,7 @@ function Dashboard() {
             <input
               type="file"
               accept="image/*"
-              onChange={handleUpdate}
+              onChange={handleUpdateFile}
               ref={fileRef}
               hidden
             />
@@ -146,49 +159,55 @@ function Dashboard() {
             <Button onClick={() => setOpenModal(true)}>Update</Button>
             <Modal show={openModal} onClose={() => setOpenModal(false)}>
               <Modal.Header>Update information</Modal.Header>
-              <Modal.Body>
-                <div className="space-y-6">
-                  <div className=" block">
-                    <Label htmlFor="username" value="Name" />
-                    <TextInput
-                      id="username"
-                      type="text"
-                      
-                      onChange={(e) => handleInfoChange(e)}
-                      value={formData.username}
-                    />
-                  </div>
+              <form>
+                <Modal.Body>
+                  <div className="space-y-6">
+                    <div className=" block">
+                      <Label htmlFor="username" value="Name" />
+                      <TextInput
+                        id="username"
+                        type="text"
+                        value={formData.username}
+                        onChange={(e) => handleInfoChange(e)}
+                      />
+                    </div>
 
-                  <div className="mb-2 block">
-                    <Label htmlFor="email" value="Email" />
-                    <TextInput
-                      id="email"
-                      type="email"
-                      
-                      onChange={(e) => handleInfoChange(e)}
-                      value={formData.email}
-                    />
+                    <div className="mb-2 block">
+                      <Label htmlFor="email" value="Email" />
+                      <TextInput
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInfoChange(e)}
+                      />
+                    </div>
+                    <div className="mb-2 block">
+                      <Label htmlFor="password" value="Password" />
+                      <TextInput
+                        id="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={(e) => handleInfoChange(e)}
+                      />
+                    </div>
                   </div>
-                  {/* <div className="mb-2 block">
-                    <Label htmlFor="password" value="Password" />
-                    <TextInput
-                      id="password"
-                      type="password"
-                      value={formData.password}
-                      onChange={(e) => handleInfoChange(e)}
-                      
-                    />
-                  </div> */}
-                </div>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button onClick={() => setOpenModal(false)}>Update</Button>
-                <Button color="gray" onClick={() => setOpenModal(false)}>
-                  Cancel
-                </Button>
-              </Modal.Footer>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    onClick={() => {
+                      setOpenModal(false);
+                      handleUpdate();
+                    }}
+                  >
+                    Update
+                  </Button>
+                  <Button color="gray" onClick={() => setOpenModal(false)}>
+                    Cancel
+                  </Button>
+                </Modal.Footer>
+              </form>
             </Modal>
-            <button>Sign Out</button>
+            <button type="button">Sign Out</button>
           </div>
         </div>
       )}
