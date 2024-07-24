@@ -1,4 +1,4 @@
-import { TextInput, Select, FileInput, Button } from "flowbite-react";
+import { TextInput, Select, FileInput, Button, Alert } from "flowbite-react";
 import React from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -18,9 +18,10 @@ function CreatePost() {
   const [postData, setPostData] = useState({
     title: "",
     category: "",
-    image: "",
+    img: "",
     content: "",
   });
+  const [error, setError] = useState("");
   console.log(postData);
   const handleUpdateFile = (e) => {
     const file = e.target.files[0];
@@ -51,7 +52,7 @@ function CreatePost() {
         // Handle successful uploads on complete
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log("File available at", downloadURL);
-          setPostData({ ...postData, image: downloadURL });
+          setPostData({ ...postData, img: downloadURL });
         });
       }
     );
@@ -60,22 +61,40 @@ function CreatePost() {
   const handleChange = (e) => {
     if (e.target == null) {
       setPostData({ ...postData, content: e });
-    } 
-    else {
+    } else {
       setPostData({ ...postData, [e.target.id]: e.target.value });
     }
+  };
 
-    //setPostData({ ...postData, [e.target.id]: e.target.value });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    axios
+      .post("http://localhost:3001/post/create", postData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        setError(err.response.data);
+        console.log(err.response.data);
+      });
   };
 
   return (
-    <form className="h-screen flex flex-col max-w-3xl mx-auto px-10 gap-4">
+    <form
+      className="min-h-screen flex flex-col max-w-3xl mx-auto px-10 gap-4"
+      onSubmit={handleSubmit}
+    >
       <h1 className="text-3xl font-bold py-5 text-center">Create a post</h1>
       <div className="flex flex-col md:flex-row justify-between gap-4">
         <TextInput
           className="flex-1"
           placeholder="Title"
-          required
+          
           id="title"
           value={postData.title}
           onChange={(e) => handleChange(e)}
@@ -101,9 +120,9 @@ function CreatePost() {
         />
         {/* <Button>Upload image</Button> */}
       </div>
-      {postData.image && (
+      {postData.img && (
         <img
-          src={postData.image}
+          src={postData.img}
           alt="preview"
           className="w-full h-72 object-cover"
         />
@@ -112,15 +131,19 @@ function CreatePost() {
         <ReactQuill
           id="content"
           theme="snow"
-          className="h-72"
+          className="h-72 mb-12"
           placeholder="Write somethings..."
-          required
+          
           value={postData.content}
           onChange={(e) => handleChange(e)}
         />
       </div>
-
-      <Button gradientDuoTone="purpleToPink" className="mt-12" type="submit">
+      {error && (
+        <Alert color="failure" className="text-md" >
+          {error}
+        </Alert>
+      )}
+      <Button gradientDuoTone="purpleToPink" type="submit">
         Create post
       </Button>
     </form>

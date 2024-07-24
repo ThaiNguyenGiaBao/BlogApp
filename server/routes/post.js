@@ -26,7 +26,10 @@ route.post("/create", verifyToken, async (req, res) => {
     res.status(200).json(savedPost);
   }
   catch(err) {
-    res.status(500).json(err);
+    if(err.code === 11000) {
+      return res.status(400).json("Title already exists");
+    }
+    res.status(400).json(err.errmsg);
   }
 });
 

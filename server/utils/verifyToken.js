@@ -12,7 +12,6 @@ module.exports =  verifyToken = async (req, res, next) => {
             return res.status(401).json('Error in verifying token');
         }
         req.user = user;
-        console.log(user)
         next();
     });
 }
