@@ -5,7 +5,7 @@ const Post = require("../models/post");
 
 
 route.post("/create", verifyToken, async (req, res) => {
-    console.log(req.user);
+
   if (!req.user.isAdmin) {
     return res.status(403).json("Not allowed");
   }
