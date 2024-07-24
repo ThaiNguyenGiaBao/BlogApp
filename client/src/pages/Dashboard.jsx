@@ -13,7 +13,7 @@ import {
 } from "firebase/storage";
 import { TextInput } from "flowbite-react";
 import axios from "axios";
-import { updateSuccess, updateFailure } from "../redux/user/userSlice";
+import { updateSuccess, updateFailure, signOut } from "../redux/user/userSlice";
 import Cookies from "js-cookie";
 
 function Dashboard() {
@@ -36,9 +36,6 @@ function Dashboard() {
 
   const dispatch = useDispatch();
 
-  const handleSignOut = () => {
-    //dispatch(signOut());
-  };
   const handleUpdateFile = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -98,6 +95,18 @@ function Dashboard() {
         dispatch(updateFailure(err.message));
       });
   };
+
+  const handleSignOut = () => {
+    axios.get("http://localhost:3001/user/signout").then((res) => {
+      //console.log(res.data);
+      Cookies.remove("token");
+      // Remove token in local storage
+      localStorage.removeItem("token");
+      dispatch(signOut());
+      window.location.href = "/signin";
+    });
+  };
+
   useEffect(() => {
     const search = new URLSearchParams(location.search);
     const Searchtab = search.get("tab");
@@ -146,7 +155,7 @@ function Dashboard() {
               hidden
             />
             <img
-              src={imgUrl || user.avatar}
+              src={imgUrl || user && user.avatar}
               alt="user"
               className="w-40 h-40 rounded-full mb-4 object-cover hover:cursor-pointer border-4 border-gray-300 dark:border-gray-700"
               onClick={() => fileRef.current.click()}
@@ -207,7 +216,9 @@ function Dashboard() {
                 </Modal.Footer>
               </form>
             </Modal>
-            <button type="button">Sign Out</button>
+            <button type="button" onClick={handleSignOut}>
+              Sign Out
+            </button>
           </div>
         </div>
       )}

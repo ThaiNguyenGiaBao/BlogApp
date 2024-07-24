@@ -36,7 +36,8 @@ route.put("/update/:userid", verifyToken, async (req, res) => {
   }
 });
 
-// Authenticate user
-const updateUser = async (req, res, next) => {};
+route.get("/signout", (req, res) => {
+  res.clearCookie("token").json("Logged out");
+});
 
 module.exports = route;

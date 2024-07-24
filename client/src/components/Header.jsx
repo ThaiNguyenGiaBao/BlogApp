@@ -5,6 +5,8 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
+import axios from "axios";
+import { signOut } from "../redux/user/userSlice";  
 
 function Header() {
   const path = useLocation().pathname;
@@ -15,6 +17,16 @@ function Header() {
 
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
+  };
+
+  const handleSignOut = () => {
+    axios.get("http://localhost:3001/user/signout").then((res) => {
+      console.log(res.data);
+      // Remove token in local storage
+      localStorage.removeItem("token");
+      dispatch(signOut());
+      window.location.href = "/signin";
+    });
   };
 
   return (
@@ -45,7 +57,7 @@ function Header() {
           <Dropdown
             inline
             arrowIcon={false}
-            label={<Avatar alt="user" img={user.avatar} rounded></Avatar>}
+            label={<Avatar alt="user" img={user&&user.avatar} rounded></Avatar>}
           >
             <Dropdown.Header className="font-semibold">
               {user.username}
@@ -53,7 +65,7 @@ function Header() {
             <Link to="/dashboard?tab=profile">
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
-            <Dropdown.Item>Sign Out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Link to={"/signin"}>
