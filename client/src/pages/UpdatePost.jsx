@@ -1,5 +1,6 @@
+import { useParams } from "react-router-dom";
 import { TextInput, Select, FileInput, Button, Alert } from "flowbite-react";
-import React from "react";
+import React, { useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
@@ -11,17 +12,17 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import axios from "axios";
-import { updateSuccess, updateFailure, signOut } from "../redux/user/userSlice";
 
-function CreatePost() {
+function UpdatePost() {
   const [postData, setPostData] = useState({
     title: "",
-    category: "uncategory",
+    category: "",
     img: "",
     content: "",
   });
   const [error, setError] = useState("");
-  console.log(postData);
+  const { id } = useParams();
+  //console.log(postData);
   const handleUpdateFile = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -69,7 +70,7 @@ function CreatePost() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     axios
-      .post("http://localhost:3001/post/create", postData, {
+      .put(`http://localhost:3001/post/update/${id}`, {...postData, updateAt: new Date()}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -84,17 +85,37 @@ function CreatePost() {
       });
   };
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/post/getposts?postId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        //console.log(res.data.posts);
+        setPostData({
+          title: res.data.posts[0].title,
+          category: res.data.posts[0].category,
+          content: res.data.posts[0].content,
+          img: res.data.posts[0].img,
+        });
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, [id]);
+
   return (
     <form
       className="min-h-screen flex flex-col max-w-3xl mx-auto px-10 gap-4"
       onSubmit={handleSubmit}
     >
-      <h1 className="text-3xl font-bold py-5 text-center">Create a post</h1>
+      <h1 className="text-3xl font-bold py-5 text-center">Update post</h1>
       <div className="flex flex-col md:flex-row justify-between gap-4">
         <TextInput
           className="flex-1"
           placeholder="Title"
-          
           id="title"
           value={postData.title}
           onChange={(e) => handleChange(e)}
@@ -133,21 +154,20 @@ function CreatePost() {
           theme="snow"
           className="h-72 mb-12"
           placeholder="Write somethings..."
-          
           value={postData.content}
           onChange={(e) => handleChange(e)}
         />
       </div>
       {error && (
-        <Alert color="failure" className="text-md" >
+        <Alert color="failure" className="text-md">
           {error}
         </Alert>
       )}
       <Button gradientDuoTone="purpleToPink" type="submit">
-        Create post
+        Update
       </Button>
     </form>
   );
 }
 
-export default CreatePost;
+export default UpdatePost;

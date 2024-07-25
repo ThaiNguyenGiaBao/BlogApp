@@ -3,11 +3,13 @@ import { useLocation, Link } from "react-router-dom";
 import { useState } from "react";
 import { Sidebar } from "flowbite-react";
 import { HiUser } from "react-icons/hi";
+import { FaUserFriends } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import { BsFileEarmarkPost } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import DashProfile from "../components/DashProfile";
 import DashPost from "../components/DashPost";
+import DashUser from "../components/DashUser";
 
 function Dashboard() {
   const location = useLocation();
@@ -51,6 +53,17 @@ function Dashboard() {
                 </Sidebar.Item>
               </Link>
             )}
+            {user.isAdmin && (
+              <Link to="/dashboard?tab=users">
+                <Sidebar.Item
+                  active={tab === "users"}
+                  icon={FaUserFriends}
+                  as="div"
+                >
+                  Users
+                </Sidebar.Item>
+              </Link>
+            )}
             <Link to="/dashboard?tab=settings">
               <Sidebar.Item
                 active={tab === "settings"}
@@ -65,6 +78,7 @@ function Dashboard() {
       </Sidebar>
       {tab === "profile" && <DashProfile />}
       {tab === "posts" && <DashPost />}
+      {tab === "users" && <DashUser />}
     </div>
   );
 }

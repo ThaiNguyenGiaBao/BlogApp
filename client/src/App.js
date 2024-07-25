@@ -9,6 +9,7 @@ import SignIn from "./pages/SignIn";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import CreatePost from "./pages/CreatePost";
+import UpdatePost from "./pages/UpdatePost";
 import PrivateRouter from "./components/PrivateRoute";
 import AdminOnlyPrivateRouter from "./components/AdminOnlyPrivateRoute";
 
@@ -24,6 +25,7 @@ function App() {
         </Route>
         <Route element={<AdminOnlyPrivateRouter />}>
           <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/update-post/:id" element={<UpdatePost />} />
         </Route>
         <Route path="/projects" element={<Projects />} />
         <Route path="/signup" element={<SignUp />} />

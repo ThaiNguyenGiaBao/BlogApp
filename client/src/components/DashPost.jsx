@@ -1,14 +1,17 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Table } from "flowbite-react";
+import { Button, Table, Modal } from "flowbite-react";
 import { Link } from "react-router-dom";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 function DashPost() {
   const user = useSelector((state) => state.user.user);
   const [posts, setPosts] = useState([]);
   const [err, setErr] = useState("");
   const [showmore, setShowmore] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
   const handleShowmore = () => {
     const startIdx = posts.length;
     axios
@@ -20,6 +23,19 @@ function DashPost() {
       .then((res) => {
         if (res.data.posts.length < 5) setShowmore(false);
         setPosts([...posts, ...res.data.posts]);
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:3001/post/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setPosts(posts.filter((post) => post._id !== id));
       })
       .catch((err) => console.log(err.message));
   };
@@ -43,11 +59,11 @@ function DashPost() {
     }
   }, []);
   return (
-    <div className="table-auto overflow-x-scroll md:mx-auto scrollbar m-5 scrollbar-track-slate-100 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-500">
+    <div className="max-w-2xl lg:max-w-max table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       {posts.length > 0 ? (
         <div>
           <Table hoverable className="shadow-md">
-            <Table.Head>
+            <Table.Head className="text-center">
               <Table.HeadCell>Date updated</Table.HeadCell>
               <Table.HeadCell>Post image</Table.HeadCell>
               <Table.HeadCell>Post title</Table.HeadCell>
@@ -57,26 +73,40 @@ function DashPost() {
             </Table.Head>
             <Table.Body>
               {posts.map((post) => (
-                <Table.Row>
+                <Table.Row key={post._id}>
                   <Table.Cell>
                     {new Date(post.updatedAt).toLocaleDateString()}
                   </Table.Cell>
-                  <Link to={`/post/${post.slug}`}>
-                    <Table.Cell>
+
+                  <Table.Cell>
+                    <Link to={`/post/${post.slug}`}>
                       <img
                         src={post.img}
                         className="w-20 h-10 object-cover"
                         alt="post"
                       />
-                    </Table.Cell>
-                  </Link>
+                    </Link>
+                  </Table.Cell>
+
                   <Table.Cell className="font-bold">{post.title}</Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
-                    <Button color="red">Delete</Button>
+                    <Button
+                      color="red"
+                      onClick={() => {
+                        console.log(post._id);
+                        setDeleteId(post._id);
+                        setOpenModal(true);
+                      }}
+                    >
+                      Delete
+                    </Button>
                   </Table.Cell>
+
                   <Table.Cell>
-                    <Button>Edit</Button>
+                    <Link to={`/update-post/${post._id}`}>
+                      <Button>Edit</Button>
+                    </Link>
                   </Table.Cell>
                 </Table.Row>
               ))}
@@ -90,7 +120,38 @@ function DashPost() {
             >
               Show more
             </Button>
-          )}{" "}
+          )}
+          <Modal
+            show={openModal}
+            size="md"
+            onClose={() => setOpenModal(false)}
+            popup
+          >
+            <Modal.Header />
+            <Modal.Body>
+              <div className="text-center">
+                <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                  Are you sure you want to delete this post?
+                </h3>
+                <div className="flex justify-center gap-4">
+                  <Button
+                    color="failure"
+                    onClick={() => {
+                      handleDelete(deleteId);
+                      setDeleteId("");
+                      setOpenModal(false);
+                    }}
+                  >
+                    {"Yes, I'm sure"}
+                  </Button>
+                  <Button color="gray" onClick={() => setOpenModal(false)}>
+                    No, cancel
+                  </Button>
+                </div>
+              </div>
+            </Modal.Body>
+          </Modal>
         </div>
       ) : (
         <h1>You don't have any post</h1>

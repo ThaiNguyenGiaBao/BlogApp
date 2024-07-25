@@ -2,13 +2,12 @@ const express = require("express");
 const route = express.Router();
 const verifyToken = require("../utils/verifyToken");
 const Post = require("../models/post");
-const { runInContext } = require("vm");
 
 route.post("/create", verifyToken, async (req, res) => {
   if (!req.user.isAdmin) {
     return res.status(403).json("Not allowed");
   }
-  if (!req.body.title && !req.body.content) {
+  if (!req.body.title || !req.body.content) {
     return res.status(400).json("Please enter all the fields");
   }
   const slug = req.body.title.replace(/ /g, "-").toLowerCase();
@@ -40,6 +39,7 @@ route.get("/getposts", verifyToken, async (req, res) => {
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.slug && { slug: req.query.slug }),
+      ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.search && {
         $or: [
           { title: { $regex: req.query.search, $options: "i" } },
@@ -47,7 +47,7 @@ route.get("/getposts", verifyToken, async (req, res) => {
         ],
       }),
     })
-      .sort({ createdAt: sortDirection })
+      .sort({ updateAt: sortDirection })
       .skip(startIdx)
       .limit(limit);
 
@@ -59,6 +59,42 @@ route.get("/getposts", verifyToken, async (req, res) => {
     });
 
     res.status(200).json({ posts, totalPosts, totalPostsLastMonth });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+route.delete("/delete/:id", verifyToken, async (req, res) => {
+  //console.log(req.user.isAdmin)
+  if (!req.user.isAdmin) {
+    return res.status(403).json("Not allowed to delete");
+  }
+
+  try {
+    await Post.findByIdAndDelete(req.params.id);
+    res.status(200).json("Post deleted successfully");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+route.put("/update/:id", verifyToken, async (req, res) => {
+  console.log(req.body);
+  if (!req.user.isAdmin) {
+    return res.status(403).json("Not allowed to update");
+  }
+  if (!req.body.title || !req.body.content) {
+    return res.status(400).json("Please enter all the fields");
+  }
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedPost);
   } catch (err) {
     res.status(500).json(err);
   }
