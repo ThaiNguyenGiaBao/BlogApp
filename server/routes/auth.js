@@ -43,7 +43,7 @@ route.post("/signin", async (req, res) => {
       const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
       const { password: pass, ...others } = user._doc;
       others.token = token;
-      console.log(others);
+      //console.log(others);
       res
         .status(200)
         .cookie("token", token, {
