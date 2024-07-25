@@ -54,7 +54,7 @@ route.get("/getusers", verifyToken, async (req, res) => {
         const { password, ...others } = user._doc;
         return others;
       });
-      const totalUsers = await User.countDocuments(); 
+      const totalUsers = await User.countDocuments();
       const totalUsersLastMonth = await User.countDocuments({
         createdAt: {
           $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
@@ -66,6 +66,25 @@ route.get("/getusers", verifyToken, async (req, res) => {
     }
   } else {
     res.status(403).json("You are not allowed to see all users");
+  }
+});
+
+route.delete("/delete/:userid", verifyToken, async (req, res) => {
+  if (req.user.isAdmin) {
+    try {
+      const user = await User.findById(req.params.userid);
+      if (user.isAdmin) {
+        return res.status(403).json("You cannot delete an admin user");
+      }
+      // Delete user
+      await User.findByIdAndDelete(req.params.userid);
+
+      res.status(200).json("User has been deleted...");
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json("You are not allowed to delete a user");
   }
 });
 
