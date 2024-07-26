@@ -79,7 +79,7 @@ route.delete("/delete/:id", verifyToken, async (req, res) => {
 });
 
 route.put("/update/:id", verifyToken, async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   if (!req.user.isAdmin) {
     return res.status(403).json("Not allowed to update");
   }
@@ -95,6 +95,19 @@ route.put("/update/:id", verifyToken, async (req, res) => {
       { new: true }
     );
     res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+route.get("/:slug", async (req, res) => {
+  const slug = req.params.slug;
+  try {
+    const post = await Post.findOne({ slug: slug });
+    if (!post) {
+      return res.status(404).json("Post not found");
+    }
+    res.status(200).json(post);
   } catch (err) {
     res.status(500).json(err);
   }

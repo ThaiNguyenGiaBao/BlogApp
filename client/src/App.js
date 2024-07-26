@@ -12,6 +12,7 @@ import CreatePost from "./pages/CreatePost";
 import UpdatePost from "./pages/UpdatePost";
 import PrivateRouter from "./components/PrivateRoute";
 import AdminOnlyPrivateRouter from "./components/AdminOnlyPrivateRoute";
+import Post from "./pages/Post";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:id" element={<UpdatePost />} />
         </Route>
+        <Route path="/post/:slug" element={<Post />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
