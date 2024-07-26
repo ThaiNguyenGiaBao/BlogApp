@@ -24,6 +24,7 @@ function OAuth() {
         })
         .then((res) => {
           console.log(res.data);
+          localStorage.setItem("token", res.data.token);
           dispatch(signInSuccess(res.data));
           navigate("/");
         })

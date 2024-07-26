@@ -3,6 +3,7 @@ const { default: mongoose } = require("mongoose");
 const dotenv = require("dotenv");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
+const commentRoute = require("./routes/comment");
 const post = require("./routes/post");
 const cookies = require("cookie-parser");
 const cors = require("cors");
@@ -39,6 +40,7 @@ updateAdmin();
 app.use("/", authRoute);
 app.use("/user", userRoute);
 app.use("/post", post);
+app.use("/comment", commentRoute);
 
 app.listen(3001, () => {
   console.log("Server is running on port 3001");

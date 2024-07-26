@@ -113,4 +113,5 @@ route.get("/:slug", async (req, res) => {
   }
 });
 
+
 module.exports = route;

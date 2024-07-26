@@ -41,3 +41,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y
 
 ### Get post by slug
 GET http://localhost:3001/post/computer
+
+### Add comment
+POST http://localhost:3001/comment/addcomment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y2ExZWQyM2QyNGE5ZTRmMCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMTgzMjg1MH0.wqCtnvyf31sSwWbSsp37aXNwTuhAb5SyuQRTn4Zm5io
+
+{
+    "userId": "66a360911557f222c23878c1",
+    "postId":  "66a27aaf22d8d1656b7005b6",
+    "content": "fasd"
+}
+
+### Get comments
+GET http://localhost:3001/comment/66a21fc07d0afc4be50f960e
+
+
+### Add comment
+GET "http://localhost:3001/comment/addcomment",
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y2ExZWQyM2QyNGE5ZTRmMCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMTgzMjg1MH0.wqCtnvyf31sSwWbSsp37aXNwTuhAb5SyuQRTn4Zm5io
+
+
