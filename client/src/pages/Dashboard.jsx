@@ -8,10 +8,13 @@ import { CiSettings } from "react-icons/ci";
 import { MdSpaceDashboard } from "react-icons/md";
 import { BsFileEarmarkPost } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import { FaComments } from "react-icons/fa";
+
 import DashProfile from "../components/DashProfile";
 import DashPost from "../components/DashPost";
 import DashUser from "../components/DashUser";
 import DashboardComponent from "../components/DashboardComponent";
+import Comment from "../components/Comment";
 
 function Dashboard() {
   const location = useLocation();
@@ -77,6 +80,17 @@ function Dashboard() {
                 </Sidebar.Item>
               </Link>
             )}
+             {user.isAdmin && (
+              <Link to="/dashboard?tab=comments">
+                <Sidebar.Item
+                  active={tab === "comments"}
+                  icon={FaComments}
+                  as="div"
+                >
+                  Comments
+                </Sidebar.Item>
+              </Link>
+            )}
             <Link to="/dashboard?tab=settings">
               <Sidebar.Item
                 active={tab === "settings"}
@@ -93,6 +107,7 @@ function Dashboard() {
       {tab === "posts" && <DashPost />}
       {tab === "users" && <DashUser />}
       {tab === "dashboard" && <DashboardComponent />}
+      {tab === "comments" && <Comment/>}
     </div>
   );
 }

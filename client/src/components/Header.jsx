@@ -42,10 +42,10 @@ function Header() {
           type="text"
           placeholder="Search"
           rightIcon={AiOutlineSearch}
-          className="hidden lg:inline"
+          className="hidden md:inline"
         ></TextInput>
       </form>
-      <Button className="lg:hidden h-10" color="gray" pill>
+      <Button className="md:hidden h-10" color="gray" pill>
         <AiOutlineSearch />
       </Button>
 
@@ -86,7 +86,7 @@ function Header() {
           <Link to="/projects">Projects</Link>
         </Navbar.Link>
         <Navbar.Link active={path === "/about"} as={"div"}>
-          <Link to="/about">About</Link>
+          <Link to="/about">About me</Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>

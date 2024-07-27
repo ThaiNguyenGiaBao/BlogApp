@@ -53,7 +53,7 @@ route.put("/edit/:commentId", verifyToken, async (req, res) => {
 });
 
 route.delete("/delete/:commentId", verifyToken, async (req, res) => {
-  console.log(req.params.commentId);
+  //console.log(req.params.commentId);
 
   const comment = await Comment.findById(req.params.commentId);
   if (comment == null) {
@@ -77,7 +77,7 @@ route.get("/get-metrics", verifyToken, async (req, res) => {
           $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
         },
       });
-     
+
       res.status(200).json({ totalComments, totalCommentsLastMonth });
     } catch (err) {
       res.status(500).json(err);
@@ -88,15 +88,42 @@ route.get("/get-metrics", verifyToken, async (req, res) => {
 });
 
 route.get("/getcomments", async (req, res) => {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-    try {
-        const comments = await Comment.find().sort({ createdAt: -1 }).limit(limit);
-        res.status(200).json(comments);
-    } catch (err) {
-        res.status(500).json(err);
-    }
-    }
-);
+  //console.log(req.params.postId);
+  const limit = req.query.limit || 10;
+  const start = req.query.start || 0;
+  try {
+    const comments = await Comment.find()
+      .skip(parseInt(start))
+      .limit(parseInt(limit));
+    const commentsWithUser = await Promise.all(
+      comments.map(async (comment) => {
+        const user = await User.findById(comment.userId);
+        if (user) {
+          console.log(user._id);
+          return {
+            ...comment._doc,
+            user: {
+              username: user.username,
+              avatar: user.avatar,
+            },
+          };
+        } else {
+          // Remove this comment
+          await Comment.findByIdAndDelete(comment._id);
+          console.log("User not found");
+        }
+      })
+    );
+
+    const filteredComments = commentsWithUser.filter((comment) => {
+      return comment != null && comment.user != null;
+    });
+    res.status(200).json(filteredComments);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+module.exports = route;
 
 route.get("/:postId", async (req, res) => {
   //console.log(req.params.postId);

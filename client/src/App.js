@@ -13,6 +13,7 @@ import UpdatePost from "./pages/UpdatePost";
 import PrivateRouter from "./components/PrivateRoute";
 import AdminOnlyPrivateRouter from "./components/AdminOnlyPrivateRoute";
 import Post from "./pages/Post";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/search" element={<Search/>}/>
       </Routes>
       <Footer />
     </Router>

@@ -139,7 +139,7 @@ function DashboardComponent() {
       </div>
 
       <div className="flex flex-col md:flex-row justify-center gap-4 mt-4">
-        <div className="border rounded-md shadow-sm p-4 w-60">
+        <div className="border rounded-md w-full shadow-sm p-4 md:w-60">
           <h1 className="font-semibold text-xl">Recent Users</h1>
           <div className="flex flex-col gap-4 mt-4">
             {recentUsers.map((user) => (

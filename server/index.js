@@ -34,8 +34,10 @@ async function updateAdmin() {
     { $set: { isAdmin: true } }, // update isAdmin to true
     { new: true } // return the updated document
   );
-}
+} 
 updateAdmin();
+
+
 
 app.use("/", authRoute);
 app.use("/user", userRoute);
