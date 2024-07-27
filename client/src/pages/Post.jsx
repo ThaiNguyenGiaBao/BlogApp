@@ -1,8 +1,10 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { AiFillLike } from "react-icons/ai";
+import { Button, Modal } from "flowbite-react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 function Post() {
   const { slug } = useParams();
@@ -20,8 +22,10 @@ function Post() {
     content: "",
     userId: user._id,
   });
+  const [commentDeleteId, setCommentDeleteId] = useState("");
   const [commentList, setCommentList] = useState([]);
-  //console.log(comment);
+  const [openModal, setOpenModal] = useState(false);
+  const [recentArticles, setRecentArticles] = useState([]);
   const maxCommentLength = 200;
   const handleComment = (e) => {
     setComment({ ...comment, content: e.target.value });
@@ -49,7 +53,6 @@ function Post() {
       )
       .then((res) => {
         console.log(res.data);
-
         axios
           .get(`http://localhost:3001/comment/${post.id}`)
           .then((res) => {
@@ -62,8 +65,78 @@ function Post() {
     setComment({ content: "" });
   };
 
+  const handleLike = (idx, commentId) => {
+    //console.log(idx, commentId);
+    const comment = commentList[idx];
+    //console.log(comment.likes.includes(user._id));
+    if (comment.likes.includes(user._id)) {
+      // User already liked, remove their like
+      comment.likes = comment.likes.filter((id) => id !== user._id);
+    } else {
+      // User hasn't liked yet, add their like
+      comment.likes = [...comment.likes, user._id];
+    }
+    console.log(comment);
+    const updatedCommentList = [...commentList];
+    updatedCommentList[idx] = comment;
+    setCommentList(updatedCommentList);
+
+    axios
+      .put(`http://localhost:3001/comment/update-likes/${commentId}`, comment, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err.message));
+  };
+  const handleDelete = (commentId) => {
+    console.log(commentId);
+    axios
+      .delete(`http://localhost:3001/comment/delete/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setCommentList(
+          commentList.filter((comment) => comment._id !== commentId)
+        );
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // Write a function to display the difference between the current time and the time the post was created (second, minute, hour, day, week, month, year)
+  const calcTime = (date) => {
+    const currentDate = new Date();
+    const postDate = new Date(date);
+    const seconds = Math.floor((currentDate - postDate) / 1000);
+    let interval = Math.floor(seconds / 31536000);
+    if (interval > 1) {
+      return interval + " years";
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+      return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+      return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+      return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+  };
   useEffect(() => {
-    let postId;
     axios
       .get(`http://localhost:3001/post/${slug}`)
       .then((res) => {
@@ -84,8 +157,17 @@ function Post() {
           .catch((err) => console.log(err.message));
       })
       .catch((err) => console.log(err.message));
+
+    // Get recent articles
+    axios
+      .get("http://localhost:3001/post/getposts?limit=3")
+      .then((res) => {
+        setRecentArticles(res.data.posts);
+      })
+      .catch((err) => console.log(err.message));
   }, [slug]);
-  console.log(commentList);
+  //console.log(commentList);
+  console.log(recentArticles);
   return (
     <div className="flex w-4/5 md:w-3/4 flex-col items-center mx-auto">
       <h1 className="font-semibold text-4xl mt-10 ">{post.title}</h1>
@@ -140,29 +222,113 @@ function Post() {
           </span>
         </p>
         {commentList.length != 0 &&
-          commentList.map((comment) => {
+          commentList.map((comment, idx) => {
+            //console.log(comment.likes);
             return (
-              <div className="flex px-6 mt-6 gap-4 " key={comment.id}>
+              <div className="flex px-6 mt-6 gap-4 " key={comment._id}>
                 <img
                   src={comment.user.avatar}
                   className="w-10 h-10 rounded-full"
                 ></img>
                 <div>
-                  <p className="font-semibold">@{comment.user.username}</p>
+                  <div className="flex gap-3">
+                    <p className="font-semibold">@{comment.user.username}</p>
+                    <p className="text-gray-500">
+                      {calcTime(comment.createdAt)}
+                    </p>
+                  </div>
                   <p>{comment.content}</p>
                   <div className="flex gap-2 text-gray-400">
-                    <button className="text-lg">
+                    <button
+                      //className="hover:text-blue-600 text-lg"
+                      className={
+                        comment.likes.includes(user._id)
+                          ? "text-blue-600"
+                          : "text-gray-400"
+                      }
+                      onClick={() => handleLike(idx, comment._id)}
+                    >
                       <AiFillLike />
                     </button>
-                    <button>{comment.numberOfLikes} Like</button>
-                    <button>Edit</button>
-                    <button>Delete</button>
+                    <button>{comment.likes.length} Like</button>
+                    {user._id === comment.userId && <button>Edit</button>}
+                    {(user._id === comment.userId || user.isAdmin) && (
+                      <button
+                        className="text-red-600 dark:text-red-500"
+                        onClick={() => {
+                          setOpenModal(true);
+                          setCommentDeleteId(comment._id);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
             );
           })}
       </div>
+      <div className="mt-10 w-full">
+        <p className="text-xl font-semibold text-center mb-3">
+          Recent articles
+        </p>
+        <div className="flex flex-col justify-center md:flex-row gap-4 flex-wrap">
+          {recentArticles.length != 0 &&
+            recentArticles.map((article) => {
+              return (
+                <Link to={`/post/${article.slug}`}>
+                  <div
+                    key={article._id}
+                    className="w-[300px] h-[330px] border rounded-xl group "
+                  >
+                    <img
+                      src={article.img}
+                      className="w-full rounded-t-lg h-[260px] object-cover group-hover:h-[200px] transition-all duration-300 z-20"
+                    ></img>
+                    <div className="px-3 my-3">
+                      <p className="font-semibold ">{article.title}</p>
+                      <p className="text-gray-500">{article.category}</p>
+                    </div>
+                    <button className="hidden group-hover:block w-3/4 text-center border border-green-500 m-auto p-2 rounded-lg hover:bg-green-500">
+                      Read article
+                    </button>
+                  </div>
+                </Link>
+              );
+            })}
+        </div>
+      </div>
+      <Modal
+        show={openModal}
+        size="md"
+        onClose={() => setOpenModal(false)}
+        popup
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this comment?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button
+                color="failure"
+                onClick={() => {
+                  setOpenModal(false);
+                  handleDelete(commentDeleteId);
+                }}
+              >
+                {"Yes, I'm sure"}
+              </Button>
+              <Button color="gray" onClick={() => setOpenModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

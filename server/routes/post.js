@@ -30,11 +30,11 @@ route.post("/create", verifyToken, async (req, res) => {
   }
 });
 
-route.get("/getposts", verifyToken, async (req, res) => {
+route.get("/getposts", async (req, res) => {
   try {
     const startIdx = parseInt(req.query.startIdx) || 0;
     const limit = parseInt(req.query.limit) || 10;
-    const sortDirection = req.query.order === "asc" ? 1 : -1;
+    const sortDirection = req.query.order === "des" ? -1 : 1;
     const posts = await Post.find({
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.userId && { userId: req.query.userId }),
@@ -112,6 +112,5 @@ route.get("/:slug", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 
 module.exports = route;

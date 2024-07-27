@@ -23,13 +23,13 @@ route.get("/:postId", async (req, res) => {
   //console.log(req.params.postId);
   try {
     const comments = await Comment.find({ postId: req.params.postId });
-    console.log(comments.length);
+    //console.log(comments.length);
     //console.log(comments);
     const commentsWithUser = await Promise.all(
       comments.map(async (comment) => {
         const user = await User.findById(comment.userId);
         if (user) {
-            console.log(user._id)
+          console.log(user._id);
           return {
             ...comment._doc,
             user: {
@@ -37,20 +37,67 @@ route.get("/:postId", async (req, res) => {
               avatar: user.avatar,
             },
           };
-        }
-        else{
-            console.log("User not found");
+        } else {
+          console.log("User not found");
         }
       })
     );
 
-    // Filter out comments without user
-    console.log(commentsWithUser.length);
-    const filteredComments = commentsWithUser.filter((comment) => comment);
-
+    const filteredComments = commentsWithUser.filter((comment) => {
+      return comment != null && comment.user != null;
+    });
     res.status(200).json(filteredComments);
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+// Update likes of a comment
+route.put("/update-likes/:commentId", verifyToken, async (req, res) => {
+  // console.log(req.body.likes);
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+    if (!comment) {
+      return res.status(404).json("Comment not found");
+    }
+    comment.likes = req.body.likes;
+    // Save changes
+    const updatedComment = await comment.save();
+    res.status(200).json(updatedComment);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+route.put("/edit/:commentId", verifyToken, async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+    if (comment.userId === req.user.id) {
+      // Only update the content of comment
+      comment.content = req.body.content;
+      const updatedComment = await comment.save();
+      res.status(200).json(updatedComment);
+    } else {
+      res.status(401).json("You can update only your comment");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+route.delete("/delete/:commentId", verifyToken, async (req, res) => {
+  console.log(req.params.commentId);
+
+  const comment = await Comment.findById(req.params.commentId);
+  if (comment == null) {
+    res.status(404).json("Comment not found");
+  }
+  if (comment.userId == req.user.id || req.user.isAdmin) {
+    // Delete comment
+    await Comment.findByIdAndDelete(req.params.commentId);
+    res.status(200).json("Comment deleted");
+  } else {
+    res.status(401).json("You can delete only your comment");
   }
 });
 
