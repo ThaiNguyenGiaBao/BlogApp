@@ -100,6 +100,25 @@ route.put("/update/:id", verifyToken, async (req, res) => {
   }
 });
 
+route.get("/get-metrics", verifyToken, async (req, res) => {
+  if (req.user.isAdmin) {
+    try {
+      const totalPosts = await Post.countDocuments();
+      const totalPostsLastMonth = await Post.countDocuments({
+        createdAt: {
+          $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        },
+      });
+
+      res.status(200).json({ totalPosts, totalPostsLastMonth });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json("You are not allowed to see metrics");
+  }
+});
+
 route.get("/:slug", async (req, res) => {
   const slug = req.params.slug;
   try {

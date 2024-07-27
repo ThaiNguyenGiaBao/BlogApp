@@ -40,6 +40,24 @@ route.get("/signout", (req, res) => {
   res.clearCookie("token").json("Logged out");
 });
 
+route.get("/get-metrics", verifyToken, async (req, res) => {
+  if (req.user.isAdmin) {
+    try {
+      const totalUsers = await User.countDocuments();
+      const totalUsersLastMonth = await User.countDocuments({
+        createdAt: {
+          $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        },
+      });
+      res.status(200).json({ totalUsers, totalUsersLastMonth });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json("You are not allowed to see metrics");
+  }
+});
+
 route.get("/getusers", verifyToken, async (req, res) => {
   const limit = req.query.limit || 5;
   const startIdx = req.query.startIdx || 0;
@@ -54,12 +72,7 @@ route.get("/getusers", verifyToken, async (req, res) => {
         const { password, ...others } = user._doc;
         return others;
       });
-      const totalUsers = await User.countDocuments();
-      const totalUsersLastMonth = await User.countDocuments({
-        createdAt: {
-          $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-        },
-      });
+
       res.status(200).json(usersWithoutPassword);
     } catch (err) {
       res.status(500).json(err);
@@ -87,5 +100,7 @@ route.delete("/delete/:userid", verifyToken, async (req, res) => {
     res.status(403).json("You are not allowed to delete a user");
   }
 });
+
+
 
 module.exports = route;

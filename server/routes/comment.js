@@ -19,39 +19,6 @@ route.post("/addcomment", verifyToken, async (req, res) => {
   }
 });
 
-route.get("/:postId", async (req, res) => {
-  //console.log(req.params.postId);
-  try {
-    const comments = await Comment.find({ postId: req.params.postId });
-    //console.log(comments.length);
-    //console.log(comments);
-    const commentsWithUser = await Promise.all(
-      comments.map(async (comment) => {
-        const user = await User.findById(comment.userId);
-        if (user) {
-          console.log(user._id);
-          return {
-            ...comment._doc,
-            user: {
-              username: user.username,
-              avatar: user.avatar,
-            },
-          };
-        } else {
-          console.log("User not found");
-        }
-      })
-    );
-
-    const filteredComments = commentsWithUser.filter((comment) => {
-      return comment != null && comment.user != null;
-    });
-    res.status(200).json(filteredComments);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
 // Update likes of a comment
 route.put("/update-likes/:commentId", verifyToken, async (req, res) => {
   // console.log(req.body.likes);
@@ -101,4 +68,66 @@ route.delete("/delete/:commentId", verifyToken, async (req, res) => {
   }
 });
 
+route.get("/get-metrics", verifyToken, async (req, res) => {
+  if (req.user.isAdmin) {
+    try {
+      const totalComments = await Comment.countDocuments();
+      const totalCommentsLastMonth = await Comment.countDocuments({
+        createdAt: {
+          $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        },
+      });
+     
+      res.status(200).json({ totalComments, totalCommentsLastMonth });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json("You are not allowed to see metrics");
+  }
+});
+
+route.get("/getcomments", async (req, res) => {
+    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+    try {
+        const comments = await Comment.find().sort({ createdAt: -1 }).limit(limit);
+        res.status(200).json(comments);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+    }
+);
+
+route.get("/:postId", async (req, res) => {
+  //console.log(req.params.postId);
+  try {
+    const comments = await Comment.find({ postId: req.params.postId });
+    //console.log(comments.length);
+    //console.log(comments);
+    const commentsWithUser = await Promise.all(
+      comments.map(async (comment) => {
+        const user = await User.findById(comment.userId);
+        if (user) {
+          console.log(user._id);
+          return {
+            ...comment._doc,
+            user: {
+              username: user.username,
+              avatar: user.avatar,
+            },
+          };
+        } else {
+          console.log("User not found");
+        }
+      })
+    );
+
+    const filteredComments = commentsWithUser.filter((comment) => {
+      return comment != null && comment.user != null;
+    });
+    res.status(200).json(filteredComments);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 module.exports = route;
