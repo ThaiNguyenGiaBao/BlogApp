@@ -5,11 +5,13 @@ import { Sidebar } from "flowbite-react";
 import { HiUser } from "react-icons/hi";
 import { FaUserFriends } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
+import { MdSpaceDashboard } from "react-icons/md";
 import { BsFileEarmarkPost } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import DashProfile from "../components/DashProfile";
 import DashPost from "../components/DashPost";
 import DashUser from "../components/DashUser";
+import DashboardComponent from "../components/DashboardComponent";
 
 function Dashboard() {
   const location = useLocation();
@@ -42,6 +44,17 @@ function Dashboard() {
                 Profile
               </Sidebar.Item>
             </Link>
+            {user.isAdmin && (
+              <Link to="/dashboard?tab=dashboard">
+                <Sidebar.Item
+                  active={tab === "dashboard"}
+                  icon={MdSpaceDashboard}
+                  as="div"
+                >
+                  Dashboard
+                </Sidebar.Item>
+              </Link>
+            )}
             {user.isAdmin && (
               <Link to="/dashboard?tab=posts">
                 <Sidebar.Item
@@ -79,6 +92,7 @@ function Dashboard() {
       {tab === "profile" && <DashProfile />}
       {tab === "posts" && <DashPost />}
       {tab === "users" && <DashUser />}
+      {tab === "dashboard" && <DashboardComponent />}
     </div>
   );
 }
