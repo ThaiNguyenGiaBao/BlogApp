@@ -6,17 +6,23 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
 import axios from "axios";
-import { signOut } from "../redux/user/userSlice";  
+import { signOut } from "../redux/user/userSlice";
+import { useState } from "react";
 
 function Header() {
   const path = useLocation().pathname;
   const { user } = useSelector((state) => state.user);
+  const [search, setSearch] = useState("");
   const dispatch = useDispatch();
-  //console.log(user);
   const theme = useSelector((state) => state.theme.theme);
 
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
+  };
+
+  const handleSearch = () => {
+    //console.log(search);
+    window.location.href = `/search?search=${search}`;
   };
 
   const handleSignOut = () => {
@@ -37,18 +43,32 @@ function Header() {
         </span>
         Blog
       </Link>
-      <form>
-        <TextInput
-          type="text"
-          placeholder="Search"
-          rightIcon={AiOutlineSearch}
-          className="hidden md:inline"
-        ></TextInput>
-      </form>
-      <Button className="md:hidden h-10" color="gray" pill>
-        <AiOutlineSearch />
-      </Button>
-
+      {/* <form onSubmit={handleSearch}>
+        <div className="hidden md:flex py-2 px-3 border rounded-full ">
+          <input
+            placeholder="Search"
+            className="border-none focus:outline-none dark:bg-gray-800"
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            value={search}
+          ></input>
+          
+            <button>
+              <AiOutlineSearch
+                className="text-2xl hover:cursor-pointer"
+                type="submit"
+              />
+            </button>
+          
+        </div>
+      </form> */}
+      <Link to="/search">
+        <AiOutlineSearch
+          className="text-4xl hover:cursor-pointer border dark:border-gray-500 rounded-full py-1 w-12"
+          color="gray"
+        />
+      </Link>
       <div className="flex gap-2 md:order-2">
         <Button className="h-10" color="gray" pill onClick={handleToggleTheme}>
           {theme == "dark" ? <FaMoon /> : <FaSun />}
@@ -57,7 +77,9 @@ function Header() {
           <Dropdown
             inline
             arrowIcon={false}
-            label={<Avatar alt="user" img={user&&user.avatar} rounded></Avatar>}
+            label={
+              <Avatar alt="user" img={user && user.avatar} rounded></Avatar>
+            }
           >
             <Dropdown.Header className="font-semibold">
               {user.username}

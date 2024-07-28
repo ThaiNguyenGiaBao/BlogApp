@@ -36,7 +36,7 @@ route.get("/getposts", async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const sortDirection = req.query.order === "des" ? -1 : 1;
     const posts = await Post.find({
-      ...(req.query.category && { category: req.query.category }),
+      ...(req.query.category&&req.query.category!="all" && { category: req.query.category }),
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
@@ -50,6 +50,8 @@ route.get("/getposts", async (req, res) => {
       .sort({ updateAt: sortDirection })
       .skip(startIdx)
       .limit(limit);
+
+    console.log(posts);
 
     const totalPosts = await Post.countDocuments({});
     const totalPostsLastMonth = await Post.countDocuments({
