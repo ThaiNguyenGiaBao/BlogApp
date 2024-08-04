@@ -2,6 +2,7 @@ import { Sidebar, TextInput, Select, Button } from "flowbite-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+
 function Search() {
   const [searchFilter, setSearchFilter] = useState({
     search: "",
@@ -15,7 +16,7 @@ function Search() {
   const handleSearchFilterChange = (e) => {
     setSearchFilter({ ...searchFilter, [e.target.name]: e.target.value });
   };
-  const shorten = (str, len = 35) => {
+  const shorten = (str, len = 30) => {
     return str.length > len ? str.substring(0, len) + "..." : str;
   };
 

@@ -36,7 +36,7 @@ function Home() {
                     className="w-full rounded-t-lg h-[260px] object-cover group-hover:h-[200px] transition-all duration-300 z-20"
                   ></img>
                   <div className="px-3 my-3">
-                    <p className="font-semibold ">{shorten(post.title, 35)}</p>
+                    <p className="font-semibold ">{shorten(post.title, 30)}</p>
                     <p className="text-gray-500">{post.category}</p>
                   </div>
                   <button className="hidden group-hover:block w-3/4 text-center border border-green-500 m-auto p-2 rounded-lg hover:bg-green-500">

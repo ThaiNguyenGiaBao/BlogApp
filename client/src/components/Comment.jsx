@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { MdOutlineExpandMore } from "react-icons/md";
 
 function Comment() {
   const [comments, setComments] = useState([]);
@@ -112,9 +113,12 @@ function Comment() {
         </Table.Body>
       </Table>
       {showMore && (
-        <Button outline className="w-full" onClick={handleShowmore}>
-          Show more
-        </Button>
+        <div>
+          <MdOutlineExpandMore
+            onClick={handleShowmore}
+            className="mx-auto hover:cursor-pointer h-10 w-10 text-gray-400 dark:text-gray-200"
+          />
+        </div>
       )}
       <Modal
         show={openModal}

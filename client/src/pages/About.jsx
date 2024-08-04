@@ -1,14 +1,19 @@
 function About() {
   return (
     <div className="min-h-screen w-4/5 md:w-3/4 mx-auto">
-      <div class="text-center mt-10">
-        <h1 class="text-3xl font-bold mb-5">
-          Hi there 👋, I'm Thai Nguyen Gia Bao
-        </h1>
-        <p class="text-xl">
-          I am a second-year <strong>Computer Science</strong> student from Ho
-          Chi Minh University of Technology (HCMUT)
-        </p>
+      <div className="flex flex-col md:flex-row gap-8 mt-14">
+        <div class="text-center md:my-auto ">
+          <h1 class="text-3xl font-bold mb-5">
+            Hi there 👋, I'm Thai Nguyen Gia Bao
+          </h1>
+          <p class="text-xl">
+            I am a second-year <strong>Computer Science</strong> student from Ho
+            Chi Minh University of Technology (HCMUT)
+          </p>
+        </div>
+        <div className="flex justify-center">
+          <img src="bao.jpg" className="w-96 rounded-2xl"></img>
+        </div>
       </div>
       {/* <img
         src="bao.jpg"

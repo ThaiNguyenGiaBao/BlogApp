@@ -4,6 +4,7 @@ import axios from "axios";
 import { Button, Table, Modal } from "flowbite-react";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { MdOutlineExpandMore } from "react-icons/md";
 
 function DashPost() {
   const user = useSelector((state) => state.user.user);
@@ -116,13 +117,12 @@ function DashPost() {
             </Table.Body>
           </Table>
           {showmore && (
-            <Button
-              className="w-full self-center"
-              onClick={handleShowmore}
-              outline
-            >
-              Show more
-            </Button>
+            <div>
+              <MdOutlineExpandMore
+                onClick={handleShowmore}
+                className="mx-auto hover:cursor-pointer h-10 w-10 text-gray-400 dark:text-gray-200"
+              />
+            </div>
           )}
           <Modal
             show={openModal}
@@ -155,6 +155,17 @@ function DashPost() {
               </div>
             </Modal.Body>
           </Modal>
+
+          {user.isAdmin && (
+            <Button
+              onClick={() => {
+                window.location.href = "/create-post";
+              }}
+              className="w-3/4 mt-4 mx-auto"
+            >
+              Create Post
+            </Button>
+          )}
         </div>
       ) : (
         <h1>You don't have any post</h1>

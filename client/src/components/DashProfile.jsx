@@ -27,7 +27,7 @@ function DashProfile() {
   });
   const [openModal, setOpenModal] = useState(false);
   const fileRef = useRef();
-
+  const [isUpload, setIsUpload] = useState(false);
 
   const user = useSelector((state) => state.user.user);
   //console.log(user);
@@ -41,6 +41,7 @@ function DashProfile() {
     }
   };
   const handleUploadImage = (file) => {
+    setIsUpload(true);
     const storage = getStorage(app);
     const filename = new Date().getTime() + file.name;
     const storageRef = ref(storage, filename);
@@ -67,6 +68,7 @@ function DashProfile() {
         });
       }
     );
+    setIsUpload(false);
   };
   const handleInfoChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -139,21 +141,21 @@ function DashProfile() {
             <form>
               <Modal.Body>
                 <div className="space-y-6">
-                 =
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleUpdateFile}
-                      ref={fileRef}
-                      hidden
-                    />
-                    <img
-                      src={imgUrl || (user && user.avatar)}
-                      alt="user"
-                      className="mx-auto w-40 h-40 rounded-full mb-4 object-cover hover:cursor-pointer border-4 border-gray-300 dark:border-gray-700"
-                      onClick={() => fileRef.current.click()}
-                    />
-=                  {error && <Alert color="failure">{error}</Alert>}
+                  =
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleUpdateFile}
+                    ref={fileRef}
+                    hidden
+                  />
+                  <img
+                    src={imgUrl || (user && user.avatar)}
+                    alt="user"
+                    className="mx-auto w-40 h-40 rounded-full mb-4 object-cover hover:cursor-pointer border-4 border-gray-300 dark:border-gray-700"
+                    onClick={() => fileRef.current.click()}
+                  />
+                  = {error && <Alert color="failure">{error}</Alert>}
                   <div className=" block">
                     <Label htmlFor="username" value="Name" />
                     <TextInput
@@ -163,7 +165,6 @@ function DashProfile() {
                       onChange={(e) => handleInfoChange(e)}
                     />
                   </div>
-
                   <div className="mb-2 block">
                     <Label htmlFor="email" value="Email" />
                     <TextInput
@@ -190,10 +191,15 @@ function DashProfile() {
                     setOpenModal(false);
                     handleUpdate();
                   }}
+                  disabled={isUpload}
                 >
                   Update
                 </Button>
-                <Button color="gray" onClick={() => setOpenModal(false)}>
+                <Button
+                  color="gray"
+                  onClick={() => setOpenModal(false)}
+                  disabled={isUpload}
+                >
                   Cancel
                 </Button>
               </Modal.Footer>
@@ -208,43 +214,9 @@ function DashProfile() {
           </button>
         </div>
       </div>
-      {/* {user.isAdmin && (
-        <Button
-          onClick={() => {
-            window.location.href = "/create-post";
-          }}
-        >
-          Create Post
-        </Button>
-      )} */}
+      
     </div>
-    // <div className="max-w-2xl md:mx-auto flex  lg:max-w-max  p-4 gap-4">
-    //   <div className="flex flex-col">
-    //     <div className="flex flex-col items-center  p-8 rounded-lg  bg-gray-100 dark:bg-gray-700">
-    //       <input
-    //         type="file"
-    //         accept="image/*"
-    //         onChange={handleUpdateFile}
-    //         ref={fileRef}
-    //         hidden
-    //       />
-    //       <img
-    //         src={imgUrl || (user && user.avatar)}
-    //         alt="user"
-    //         className="w-30 h-30 rounded-full mb-4 object-cover hover:cursor-pointer border-4 border-gray-300 dark:border-gray-700"
-    //         onClick={() => fileRef.current.click()}
-    //       />
-    //       {error && <Alert color="failure">{error}</Alert>}
-    //       <h2 className="text-lg font-semibold text-center">{user.username}</h2>
-    //     </div>
-    //   </div>
-    //   <div className="flex flex-col">
-    //     <div className="p-8 rounded-lg  bg-gray-100 dark:bg-gray-700">
-    //       <p><span className="font-semibold">Name:</span> {user.username}</p>
-    //       <p><span className="font-semibold">Email:</span> {user.email}</p>
-    //     </div>
-    //   </div>
-    // </div>
+   
   );
 }
 

@@ -11,7 +11,6 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import axios from "axios";
-import { updateSuccess, updateFailure, signOut } from "../redux/user/userSlice";
 
 function CreatePost() {
   const [postData, setPostData] = useState({
@@ -20,8 +19,8 @@ function CreatePost() {
     img: "",
     content: "",
   });
+  console.log(postData.content);
   const [error, setError] = useState("");
-  console.log(postData);
   const handleUpdateFile = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -141,6 +140,24 @@ function CreatePost() {
           {error}
         </Alert>
       )}
+
+      <div>
+        <label
+          for="message"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          Write HTML
+        </label>
+        <textarea
+          id="content"
+          rows="4"
+          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          //value={postData.content}
+         // onChange={(e) => handleChange(e)}
+          placeholder="Write your html here..."
+        ></textarea>
+      </div>
+
       <Button gradientDuoTone="purpleToPink" type="submit">
         Create post
       </Button>

@@ -209,9 +209,9 @@ function Post() {
       <div className="w-full md:w-4/5">
         {user ? (
           <div className="flex gap-1 items-center">
-              <p>Signed in as: </p>
-              <img src={user.avatar} className="w-6 h-6 rounded-full"></img>
-              <p className="text-blue-700 dark:text-blue-500">@{user.username}</p>
+            <p>Signed in as: </p>
+            <img src={user.avatar} className="w-6 h-6 rounded-full"></img>
+            <p className="text-blue-700 dark:text-blue-500">@{user.username}</p>
           </div>
         ) : (
           <p>Sign in to comment</p>
@@ -303,25 +303,27 @@ function Post() {
         <p className="text-xl font-semibold text-center mb-3">
           Recent articles
         </p>
-        <div className="flex flex-col justify-center md:flex-row gap-4 flex-wrap">
+        <div className="flex flex-col items-center md:justify-center md:flex-row gap-8 flex-wrap">
           {recentArticles.length != 0 &&
-            recentArticles.map((article) => {
+            recentArticles.map((post) => {
               return (
-                <Link to={`/post/${article.slug}`}>
+                <Link to={`/post/${post.slug}`}>
                   <div
-                    key={article._id}
+                    key={post._id}
                     className="w-[300px] h-[330px] border border-gray-300 dark:border-gray-700 rounded-xl group "
                   >
                     <img
-                      src={article.img}
+                      src={post.img}
                       className="w-full rounded-t-lg h-[260px] object-cover group-hover:h-[200px] transition-all duration-300 z-20"
                     ></img>
                     <div className="px-3 my-3">
-                      <p className="font-semibold ">{shorten(article.title)}</p>
-                      <p className="text-gray-500">{article.category}</p>
+                      <p className="font-semibold ">
+                        {shorten(post.title, 35)}
+                      </p>
+                      <p className="text-gray-500">{post.category}</p>
                     </div>
                     <button className="hidden group-hover:block w-3/4 text-center border border-green-500 m-auto p-2 rounded-lg hover:bg-green-500">
-                      Read article
+                      Read post
                     </button>
                   </div>
                 </Link>
