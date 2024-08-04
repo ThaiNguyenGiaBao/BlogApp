@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { AiFillLike } from "react-icons/ai";
-import { Button, Modal } from "flowbite-react";
+import { Alert, Button, Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 function Post() {
@@ -20,18 +20,25 @@ function Post() {
   const user = useSelector((state) => state.user.user);
   const [comment, setComment] = useState({
     content: "",
-    userId: user._id,
+    //userId: user._id,
   });
   const [commentDeleteId, setCommentDeleteId] = useState("");
   const [commentList, setCommentList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [recentArticles, setRecentArticles] = useState([]);
+  const [error, setError] = useState(null);
   const maxCommentLength = 200;
   const handleComment = (e) => {
     setComment({ ...comment, content: e.target.value });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (user == null) {
+      setError("Please sign in to comment");
+      return;
+    }
+    if (user == null) {
+    }
     console.log({
       postId: post.id,
       content: comment.content,
@@ -66,15 +73,18 @@ function Post() {
   };
 
   const handleLike = (idx, commentId) => {
+    if (user == null) {
+      return;
+    }
     //console.log(idx, commentId);
     const comment = commentList[idx];
     //console.log(comment.likes.includes(user._id));
-    if (comment.likes.includes(user._id)) {
+    if (comment.likes.includes(user?._id)) {
       // User already liked, remove their like
-      comment.likes = comment.likes.filter((id) => id !== user._id);
+      comment.likes = comment.likes.filter((id) => id !== user?._id);
     } else {
       // User hasn't liked yet, add their like
-      comment.likes = [...comment.likes, user._id];
+      comment.likes = [...comment.likes, user?._id];
     }
     console.log(comment);
     const updatedCommentList = [...commentList];
@@ -140,6 +150,9 @@ function Post() {
     }
     return Math.floor(seconds) + " seconds";
   };
+  const shorten = (str, len = 35) => {
+    return str.length > len ? str.substring(0, len) + "..." : str;
+  };
   useEffect(() => {
     axios
       .get(`http://14.225.192.183:8000/post/${slug}`)
@@ -194,14 +207,22 @@ function Post() {
         />
       </div>
       <div className="w-full md:w-4/5">
-        <div className="flex gap-1 items-center">
-          <p>Signed in as: </p>
-          <img src={user.avatar} className="w-6 h-6 rounded-full"></img>
-          <p className="text-blue-700 ">@{user.username}</p>
-        </div>
-        <form className="border rounded-lg p-5 mt-4" onSubmit={handleSubmit}>
+        {user ? (
+          <div className="flex gap-1 items-center">
+              <p>Signed in as: </p>
+              <img src={user.avatar} className="w-6 h-6 rounded-full"></img>
+              <p className="text-blue-700 dark:text-blue-500">@{user.username}</p>
+          </div>
+        ) : (
+          <p>Sign in to comment</p>
+        )}
+
+        <form
+          className="border dark:border-gray-700 rounded-lg p-5 mt-4"
+          onSubmit={handleSubmit}
+        >
           <textarea
-            className="w-full min-h-20 border rounded-lg p-2 border-blue-600"
+            className="w-full min-h-20 border dark:bg-gray-700 rounded-lg p-2 border-blue-600"
             placeholder="Write a comment..."
             value={comment.content}
             onChange={handleComment}
@@ -219,6 +240,11 @@ function Post() {
             </button>
           </div>
         </form>
+        {error && (
+          <Alert color="red" className="mt-4">
+            {error}
+          </Alert>
+        )}
         <p className="mt-4">
           Comments{" "}
           <span className="px-2 py-1 border border-gray-400 rounded-md">
@@ -246,7 +272,7 @@ function Post() {
                     <button
                       //className="hover:text-blue-600 text-lg"
                       className={
-                        comment.likes.includes(user._id)
+                        comment.likes.includes(user?._id)
                           ? "text-blue-600"
                           : "text-gray-400"
                       }
@@ -255,8 +281,8 @@ function Post() {
                       <AiFillLike />
                     </button>
                     <button>{comment.likes.length} Like</button>
-                    {user._id === comment.userId && <button>Edit</button>}
-                    {(user._id === comment.userId || user.isAdmin) && (
+                    {user?._id === comment.userId && <button>Edit</button>}
+                    {(user?._id === comment.userId || user?.isAdmin) && (
                       <button
                         className="text-red-600 dark:text-red-500"
                         onClick={() => {
@@ -284,14 +310,14 @@ function Post() {
                 <Link to={`/post/${article.slug}`}>
                   <div
                     key={article._id}
-                    className="w-[300px] h-[330px] border rounded-xl group "
+                    className="w-[300px] h-[330px] border border-gray-300 dark:border-gray-700 rounded-xl group "
                   >
                     <img
                       src={article.img}
                       className="w-full rounded-t-lg h-[260px] object-cover group-hover:h-[200px] transition-all duration-300 z-20"
                     ></img>
                     <div className="px-3 my-3">
-                      <p className="font-semibold ">{article.title}</p>
+                      <p className="font-semibold ">{shorten(article.title)}</p>
                       <p className="text-gray-500">{article.category}</p>
                     </div>
                     <button className="hidden group-hover:block w-3/4 text-center border border-green-500 m-auto p-2 rounded-lg hover:bg-green-500">

@@ -86,7 +86,7 @@ function DashboardComponent() {
   return (
     <div className="max-w-2xl lg:max-w-max table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <div className="w-full sm:w-60 p-4  border rounded-md shadow-md">
+        <div className="w-full sm:w-60 p-4 dark:bg-gray-700 dark:border-gray-700 border rounded-md shadow-md">
           <div className="flex justify-between">
             <div>
               <p className="font-semibold">TOTAL USER</p>
@@ -102,7 +102,7 @@ function DashboardComponent() {
             Last month
           </p>
         </div>
-        <div className="w-full sm:w-60 p-4  border rounded-md shadow-md">
+        <div className="w-full sm:w-60 p-4 dark:bg-gray-700 dark:border-gray-700 border rounded-md shadow-md">
           <div className="flex justify-between">
             <div>
               <p className="font-semibold">TOTAL COMMENT</p>
@@ -119,7 +119,7 @@ function DashboardComponent() {
             Last month
           </p>
         </div>
-        <div className="w-full sm:w-60 p-4  border rounded-md shadow-md">
+        <div className="w-full sm:w-60 p-4 dark:bg-gray-700 dark:border-gray-700  border rounded-md shadow-md">
           <div className="flex justify-between">
             <div>
               <p className="font-semibold">TOTAL POSTS</p>
@@ -139,7 +139,7 @@ function DashboardComponent() {
       </div>
 
       <div className="flex flex-col md:flex-row justify-center gap-4 mt-4">
-        <div className="border rounded-md w-full shadow-sm p-4 md:w-60">
+        <div className="border dark:bg-gray-700 dark:border-gray-700 rounded-md w-full shadow-sm p-4 md:w-60">
           <h1 className="font-semibold text-xl">Recent Users</h1>
           <div className="flex flex-col gap-4 mt-4">
             {recentUsers.map((user) => (
@@ -153,7 +153,7 @@ function DashboardComponent() {
             ))}
           </div>
         </div>
-        <div className="border rounded-md shadow-sm p-4 w-96">
+        <div className="border dark:bg-gray-700 dark:border-gray-700  rounded-md shadow-sm p-4 w-96">
           <h1 className="font-semibold text-xl">Recent Comments</h1>
           <div className="flex flex-col gap-3 mt-4">
             {recentComments.length != 0 &&

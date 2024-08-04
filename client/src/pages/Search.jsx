@@ -15,6 +15,9 @@ function Search() {
   const handleSearchFilterChange = (e) => {
     setSearchFilter({ ...searchFilter, [e.target.name]: e.target.value });
   };
+  const shorten = (str, len = 35) => {
+    return str.length > len ? str.substring(0, len) + "..." : str;
+  };
 
   const handleShowmore = () => {
     const startIdx = posts.length;
@@ -144,7 +147,7 @@ function Search() {
                         className="w-full rounded-t-lg h-[260px] object-cover group-hover:h-[200px] transition-all duration-300 z-20"
                       ></img>
                       <div className="px-3 my-3">
-                        <p className="font-semibold ">{post.title}</p>
+                        <p className="font-semibold ">{shorten(post.title)}</p>
                         <p className="text-gray-500">{post.category}</p>
                       </div>
                       <button className="hidden group-hover:block w-3/4 text-center border border-green-500 m-auto p-2 rounded-lg hover:bg-green-500">

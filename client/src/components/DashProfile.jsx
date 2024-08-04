@@ -15,7 +15,6 @@ import axios from "axios";
 import { updateSuccess, updateFailure, signOut } from "../redux/user/userSlice";
 
 function DashProfile() {
-  const location = useLocation();
   const [file, setFile] = useState(null);
   const [imgUrl, setImgUrl] = useState(null);
   const [imgDownload, setImgDownload] = useState(null);
@@ -28,6 +27,7 @@ function DashProfile() {
   });
   const [openModal, setOpenModal] = useState(false);
   const fileRef = useRef();
+
 
   const user = useSelector((state) => state.user.user);
   //console.log(user);
@@ -112,91 +112,139 @@ function DashProfile() {
   }, [user]);
 
   return (
-    <div className=" max-w-lg mx-auto w-full bg-gray-100 dark:bg-slate-800 m-5 rounded-lg pt-24">
-      <div className="flex flex-col items-center h-3/4">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleUpdateFile}
-          ref={fileRef}
-          hidden
-        />
-        <img
-          src={imgUrl || (user && user.avatar)}
-          alt="user"
-          className="w-40 h-40 rounded-full mb-4 object-cover hover:cursor-pointer border-4 border-gray-300 dark:border-gray-700"
-          onClick={() => fileRef.current.click()}
-        />
-        {error && <Alert color="failure">{error}</Alert>}
-        <h2 className="text-2xl font-semibold">{user.username}</h2>
-        <p className="text-xl">{user.email}</p>
-      </div>
-      <div className="flex justify-around mt-4">
-        <Button onClick={() => setOpenModal(true)}>Update</Button>
-        <Modal show={openModal} onClose={() => setOpenModal(false)}>
-          <Modal.Header>Update information</Modal.Header>
-          <form>
-            <Modal.Body>
-              <div className="space-y-6">
-                <div className=" block">
-                  <Label htmlFor="username" value="Name" />
-                  <TextInput
-                    id="username"
-                    type="text"
-                    value={formData.username}
-                    onChange={(e) => handleInfoChange(e)}
-                  />
-                </div>
+    <div className="max-w-lg mx-auto w-full">
+      <div className="  bg-gray-100 dark:bg-slate-800 m-5 rounded-lg pt-12 p-8">
+        <div className="flex flex-col items-center ">
+          <img
+            src={imgUrl || (user && user.avatar)}
+            alt="user"
+            className="w-40 h-40 rounded-full mb-4 object-cover border-4 border-gray-300 dark:border-gray-700"
+          />
+          {error && <Alert color="failure">{error}</Alert>}
+          <h2 className="text-2xl font-semibold">{user.username}</h2>
+          <p className="text-xl">{user.email}</p>
+        </div>
 
-                <div className="mb-2 block">
-                  <Label htmlFor="email" value="Email" />
-                  <TextInput
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInfoChange(e)}
-                  />
-                </div>
-                <div className="mb-2 block">
-                  <Label htmlFor="password" value="Password" />
-                  <TextInput
-                    id="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={(e) => handleInfoChange(e)}
-                  />
-                </div>
-              </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                onClick={() => {
-                  setOpenModal(false);
-                  handleUpdate();
-                }}
-              >
-                Update
-              </Button>
-              <Button color="gray" onClick={() => setOpenModal(false)}>
-                Cancel
-              </Button>
-            </Modal.Footer>
-          </form>
-        </Modal>
-        {user.isAdmin && (
-          <Button
-            onClick={() => {
-              window.location.href = "/create-post";
-            }}
+        <div className="flex justify-around mt-10">
+          <button
+            onClick={() => setOpenModal(true)}
+            type="button"
+            class="text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
           >
-            Create Post
-          </Button>
-        )}
-        <Button type="button" onClick={handleSignOut}>
-          Sign Out
-        </Button>
+            Update
+          </button>
+
+          <Modal show={openModal} onClose={() => setOpenModal(false)}>
+            <Modal.Header>Update information</Modal.Header>
+            <form>
+              <Modal.Body>
+                <div className="space-y-6">
+                 =
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleUpdateFile}
+                      ref={fileRef}
+                      hidden
+                    />
+                    <img
+                      src={imgUrl || (user && user.avatar)}
+                      alt="user"
+                      className="mx-auto w-40 h-40 rounded-full mb-4 object-cover hover:cursor-pointer border-4 border-gray-300 dark:border-gray-700"
+                      onClick={() => fileRef.current.click()}
+                    />
+=                  {error && <Alert color="failure">{error}</Alert>}
+                  <div className=" block">
+                    <Label htmlFor="username" value="Name" />
+                    <TextInput
+                      id="username"
+                      type="text"
+                      value={formData.username}
+                      onChange={(e) => handleInfoChange(e)}
+                    />
+                  </div>
+
+                  <div className="mb-2 block">
+                    <Label htmlFor="email" value="Email" />
+                    <TextInput
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInfoChange(e)}
+                    />
+                  </div>
+                  <div className="mb-2 block">
+                    <Label htmlFor="password" value="Password" />
+                    <TextInput
+                      id="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={(e) => handleInfoChange(e)}
+                    />
+                  </div>
+                </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  onClick={() => {
+                    setOpenModal(false);
+                    handleUpdate();
+                  }}
+                >
+                  Update
+                </Button>
+                <Button color="gray" onClick={() => setOpenModal(false)}>
+                  Cancel
+                </Button>
+              </Modal.Footer>
+            </form>
+          </Modal>
+          <button
+            onClick={handleSignOut}
+            type="button"
+            class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+          >
+            Sign Out
+          </button>
+        </div>
       </div>
+      {/* {user.isAdmin && (
+        <Button
+          onClick={() => {
+            window.location.href = "/create-post";
+          }}
+        >
+          Create Post
+        </Button>
+      )} */}
     </div>
+    // <div className="max-w-2xl md:mx-auto flex  lg:max-w-max  p-4 gap-4">
+    //   <div className="flex flex-col">
+    //     <div className="flex flex-col items-center  p-8 rounded-lg  bg-gray-100 dark:bg-gray-700">
+    //       <input
+    //         type="file"
+    //         accept="image/*"
+    //         onChange={handleUpdateFile}
+    //         ref={fileRef}
+    //         hidden
+    //       />
+    //       <img
+    //         src={imgUrl || (user && user.avatar)}
+    //         alt="user"
+    //         className="w-30 h-30 rounded-full mb-4 object-cover hover:cursor-pointer border-4 border-gray-300 dark:border-gray-700"
+    //         onClick={() => fileRef.current.click()}
+    //       />
+    //       {error && <Alert color="failure">{error}</Alert>}
+    //       <h2 className="text-lg font-semibold text-center">{user.username}</h2>
+    //     </div>
+    //   </div>
+    //   <div className="flex flex-col">
+    //     <div className="p-8 rounded-lg  bg-gray-100 dark:bg-gray-700">
+    //       <p><span className="font-semibold">Name:</span> {user.username}</p>
+    //       <p><span className="font-semibold">Email:</span> {user.email}</p>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
 

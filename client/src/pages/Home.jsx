@@ -3,7 +3,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 function Home() {
   const [posts, setPosts] = useState([]);
-
+  const shorten = (str, len = 30) => {
+    return str.length > len ? str.substring(0, len) + "..." : str;
+  };
   useEffect(() => {
     axios
       .get("http://14.225.192.183:8000/post/getposts?limit=4")
@@ -27,14 +29,14 @@ function Home() {
               <Link to={`/post/${post.slug}`}>
                 <div
                   key={post._id}
-                  className="w-[300px] h-[330px] border rounded-xl group "
+                  className="w-[300px] h-[330px] border border-gray-300 dark:border-gray-700 rounded-xl group "
                 >
                   <img
                     src={post.img}
                     className="w-full rounded-t-lg h-[260px] object-cover group-hover:h-[200px] transition-all duration-300 z-20"
                   ></img>
                   <div className="px-3 my-3">
-                    <p className="font-semibold ">{post.title}</p>
+                    <p className="font-semibold ">{shorten(post.title, 35)}</p>
                     <p className="text-gray-500">{post.category}</p>
                   </div>
                   <button className="hidden group-hover:block w-3/4 text-center border border-green-500 m-auto p-2 rounded-lg hover:bg-green-500">
