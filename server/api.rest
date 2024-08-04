@@ -8,15 +8,25 @@ Content-Type: application/json
     "password": "123"
 }
 
-
-### Update User
-PUT http://14.225.192.183:8000/user/update/669fcb36ca1ed23d24a9e4f0
+### 
+POST http://14.225.192.183:8000/signin
 Content-Type: application/json
 
 {
-    "username": "giabao123",
-    "email": "bao@gmail.com",
+    "email": "bao@123",
     "password": "123"
+}
+
+### Update User
+PUT http://14.225.192.183:8000/user/update/66af42a8b952588244cae653
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YWY0MmE4Yjk1MjU4ODI0NGNhZTY1MyIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMjc4NzAwMH0.jn-JD6hectptGQzVbaq4rcg1xJ-8fDEfdV-n8f_1j-I
+
+{
+    "username": "giabao123",
+    "email": "bao@123",
+    "password": "123",
+    "avatar": "https://firebasestorage.googleapis.com/v0/b/blog-f3876.appspot.com/o/1722787413635bao.jpg?alt=media&token=5bcc5ed5-eb29-40f7-9857-813154fc0a7a"
 }
 
 ### Create post

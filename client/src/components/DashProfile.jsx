@@ -80,7 +80,6 @@ function DashProfile() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true, // Include credentials in the request
       })
       .then((res) => {
         console.log(res.data);
@@ -214,9 +213,7 @@ function DashProfile() {
           </button>
         </div>
       </div>
-      
     </div>
-   
   );
 }
 
