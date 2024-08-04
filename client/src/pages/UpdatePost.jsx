@@ -70,11 +70,15 @@ function UpdatePost() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     axios
-      .put(`http://localhost:3001/post/update/${id}`, {...postData, updateAt: new Date()}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .put(
+        `http://14.225.192.183:8000/post/update/${id}`,
+        { ...postData, updateAt: new Date() },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         window.location.href = "/dashboard?tab=posts";
@@ -87,7 +91,7 @@ function UpdatePost() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/post/getposts?postId=${id}`, {
+      .get(`http://14.225.192.183:8000/post/getposts?postId=${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

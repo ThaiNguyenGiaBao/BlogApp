@@ -74,7 +74,7 @@ function DashProfile() {
   const handleUpdate = async () => {
     const token = localStorage.getItem("token");
     axios
-      .put(`http://localhost:3001/user/update/${user._id}`, formData, {
+      .put(`http://14.225.192.183:8000/user/update/${user._id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -91,14 +91,13 @@ function DashProfile() {
   };
 
   const handleSignOut = () => {
-    axios.get("http://localhost:3001/user/signout").then((res) => {
+    axios.get("http://14.225.192.183:8000/user/signout").then((res) => {
       // Remove token in local storage
       localStorage.removeItem("token");
       dispatch(signOut());
       window.location.href = "/signin";
     });
   };
-
 
   useEffect(() => {
     if (file) {

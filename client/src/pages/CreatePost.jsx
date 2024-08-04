@@ -69,7 +69,7 @@ function CreatePost() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     axios
-      .post("http://localhost:3001/post/create", postData, {
+      .post("http://14.225.192.183:8000/post/create", postData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -94,7 +94,6 @@ function CreatePost() {
         <TextInput
           className="flex-1"
           placeholder="Title"
-          
           id="title"
           value={postData.title}
           onChange={(e) => handleChange(e)}
@@ -133,13 +132,12 @@ function CreatePost() {
           theme="snow"
           className="h-72 mb-12"
           placeholder="Write somethings..."
-          
           value={postData.content}
           onChange={(e) => handleChange(e)}
         />
       </div>
       {error && (
-        <Alert color="failure" className="text-md" >
+        <Alert color="failure" className="text-md">
           {error}
         </Alert>
       )}

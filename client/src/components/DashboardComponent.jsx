@@ -19,7 +19,7 @@ function DashboardComponent() {
   useEffect(() => {
     //fetch data
     axios
-      .get("http://localhost:3001/user/get-metrics", {
+      .get("http://14.225.192.183:8000/user/get-metrics", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -34,7 +34,7 @@ function DashboardComponent() {
       .catch((err) => console.log(err.message));
 
     axios
-      .get("http://localhost:3001/comment/get-metrics", {
+      .get("http://14.225.192.183:8000/comment/get-metrics", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -49,7 +49,7 @@ function DashboardComponent() {
       .catch((err) => console.log(err.message));
 
     axios
-      .get("http://localhost:3001/post/get-metrics", {
+      .get("http://14.225.192.183:8000/post/get-metrics", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -64,7 +64,7 @@ function DashboardComponent() {
       .catch((err) => console.log(err.message));
 
     axios
-      .get("http://localhost:3001/user/getusers", {
+      .get("http://14.225.192.183:8000/user/getusers", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -76,7 +76,7 @@ function DashboardComponent() {
       .catch((err) => console.log(err.message));
 
     axios
-      .get("http://localhost:3001/comment/getcomments")
+      .get("http://14.225.192.183:8000/comment/getcomments")
       .then((res) => {
         console.log(res.data);
         setRecentComments(res.data);

@@ -30,7 +30,7 @@ function SignIn() {
       return dispatch(signInFailure("Please fill all the fields"));
     }
     axios
-      .post("http://localhost:3001/signin", formData)
+      .post("http://14.225.192.183:8000/signin", formData)
       .then((res) => {
         //console.log(res);
         dispatch(signInStart());
@@ -38,7 +38,7 @@ function SignIn() {
           navigate("/");
           console.log(res.data);
           dispatch(signInSuccess(res.data));
-          localStorage.setItem('token', res.data.token);
+          localStorage.setItem("token", res.data.token);
         } else {
           //console.log(res.data);
           dispatch(signInFailure(res.data));

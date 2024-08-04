@@ -6,7 +6,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/post/getposts?limit=4")
+      .get("http://14.225.192.183:8000/post/getposts?limit=4")
       .then((res) => {
         console.log(res.data);
         setPosts(res.data.posts);
@@ -21,7 +21,6 @@ function Home() {
 
       <p className="text-3xl font-bold text-center my-4">Posts</p>
       <div className="flex flex-col items-center md:justify-center md:flex-row gap-8 flex-wrap">
-       
         {posts.length != 0 &&
           posts.map((post) => {
             return (

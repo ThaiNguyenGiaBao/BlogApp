@@ -13,7 +13,7 @@ function DashUser() {
   };
   const handleDelete = () => {
     axios
-      .delete(`http://localhost:3001/user/delete/${deleteId}`, {
+      .delete(`http://14.225.192.183:8000/user/delete/${deleteId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -28,7 +28,7 @@ function DashUser() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/user/getusers", {
+      .get("http://14.225.192.183:8000/user/getusers", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -44,11 +44,14 @@ function DashUser() {
   const handleShowmore = () => {
     const startIdx = users.length;
     axios
-      .get(`http://localhost:3001/user/getusers?startIdx=${startIdx}&limit=5`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+      .get(
+        `http://14.225.192.183:8000/user/getusers?startIdx=${startIdx}&limit=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((res) => {
         if (res.data.length < 5) setShowMore(false);
         setUsers([...users, ...res.data]);
@@ -86,7 +89,15 @@ function DashUser() {
                   </div>
                 </Table.Cell>
                 <Table.Cell>{shorten(user.email)}</Table.Cell>
-                <Table.Cell>{user.isAdmin ?<p className="font-bold text-green-600 dark:text-green-300">Admin</p> : "User"}</Table.Cell>
+                <Table.Cell>
+                  {user.isAdmin ? (
+                    <p className="font-bold text-green-600 dark:text-green-300">
+                      Admin
+                    </p>
+                  ) : (
+                    "User"
+                  )}
+                </Table.Cell>
                 <Table.Cell>
                   <button
                     className="text-red-700"

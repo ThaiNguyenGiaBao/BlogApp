@@ -15,11 +15,14 @@ function DashPost() {
   const handleShowmore = () => {
     const startIdx = posts.length;
     axios
-      .get(`http://localhost:3001/post/getposts?startIdx=${startIdx}&limit=5`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+      .get(
+        `http://14.225.192.183:8000/post/getposts?startIdx=${startIdx}&limit=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((res) => {
         if (res.data.posts.length < 5) setShowmore(false);
         setPosts([...posts, ...res.data.posts]);
@@ -28,7 +31,7 @@ function DashPost() {
   };
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:3001/post/delete/${id}`, {
+      .delete(`http://14.225.192.183:8000/post/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -42,7 +45,7 @@ function DashPost() {
   useEffect(() => {
     const fetchData = () => {
       axios
-        .get("http://localhost:3001/post/getposts?limit=5", {
+        .get("http://14.225.192.183:8000/post/getposts?limit=5", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

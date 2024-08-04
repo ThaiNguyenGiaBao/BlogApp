@@ -39,7 +39,7 @@ function Post() {
     });
     axios
       .post(
-        "http://localhost:3001/comment/addcomment",
+        "http://14.225.192.183:8000/comment/addcomment",
         {
           postId: post.id,
           content: comment.content,
@@ -54,7 +54,7 @@ function Post() {
       .then((res) => {
         console.log(res.data);
         axios
-          .get(`http://localhost:3001/comment/${post.id}`)
+          .get(`http://14.225.192.183:8000/comment/${post.id}`)
           .then((res) => {
             //console.log(res.data);
             setCommentList(res.data);
@@ -82,11 +82,15 @@ function Post() {
     setCommentList(updatedCommentList);
 
     axios
-      .put(`http://localhost:3001/comment/update-likes/${commentId}`, comment, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+      .put(
+        `http://14.225.192.183:8000/comment/update-likes/${commentId}`,
+        comment,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
       })
@@ -95,7 +99,7 @@ function Post() {
   const handleDelete = (commentId) => {
     console.log(commentId);
     axios
-      .delete(`http://localhost:3001/comment/delete/${commentId}`, {
+      .delete(`http://14.225.192.183:8000/comment/delete/${commentId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -138,7 +142,7 @@ function Post() {
   };
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/post/${slug}`)
+      .get(`http://14.225.192.183:8000/post/${slug}`)
       .then((res) => {
         setPost({
           title: res.data.title,
@@ -149,7 +153,7 @@ function Post() {
           id: res.data._id,
         });
         axios
-          .get(`http://localhost:3001/comment/${res.data._id}`)
+          .get(`http://14.225.192.183:8000/comment/${res.data._id}`)
           .then((res) => {
             //console.log(res.data);
             setCommentList(res.data);
@@ -160,7 +164,7 @@ function Post() {
 
     // Get recent articles
     axios
-      .get("http://localhost:3001/post/getposts?limit=3")
+      .get("http://14.225.192.183:8000/post/getposts?limit=3")
       .then((res) => {
         setRecentArticles(res.data.posts);
       })

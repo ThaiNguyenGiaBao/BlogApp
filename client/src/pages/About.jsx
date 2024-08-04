@@ -14,9 +14,9 @@ function About() {
         src="bao.jpg"
         className="w-full mt-10 rounded-md  object-cover object-top z-20"
       /> */}
-      <div class="my-10">
-        <h2 class="text-2xl font-bold mb-5">About Me</h2>
-        <ul class="list-disc pl-5 space-y-2">
+      <div className="my-10">
+        <h2 className="text-2xl font-bold mb-5">About Me</h2>
+        <ul className="list-disc pl-5 space-y-2">
           <li>
             Eager to learn everything in the vast field of computer science!
           </li>
@@ -26,7 +26,7 @@ function About() {
           </li>
           <li>
             Strengths:
-            <ul class="list-disc pl-5">
+            <ul className="list-disc pl-5">
               <li>
                 Have a solid foundation in theoretical knowledge in Computer
                 Science
@@ -43,9 +43,9 @@ function About() {
         </ul>
       </div>
 
-      <div class="my-10">
-        <h2 class="text-2xl font-bold mb-5">Goals</h2>
-        <ul class="list-disc pl-5 space-y-2">
+      <div className="my-10">
+        <h2 className="text-2xl font-bold mb-5">Goals</h2>
+        <ul className="list-disc pl-5 space-y-2">
           <li>
             Continuously expand my knowledge and skills in computer science.
           </li>

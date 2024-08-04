@@ -23,7 +23,7 @@ function SignUp() {
       return setError("Please fill all the fields");
     }
     axios
-      .post("http://localhost:3001/signup", formData)
+      .post("http://14.225.192.183:8000/signup", formData)
       .then((res) => {
         console.log(res.data);
         if (res.data === "User created successfully") {

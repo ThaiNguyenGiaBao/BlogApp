@@ -19,11 +19,14 @@ function Search() {
   const handleShowmore = () => {
     const startIdx = posts.length;
     axios
-      .get(`http://localhost:3001/post/getposts?startIdx=${startIdx}&limit=5`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+      .get(
+        `http://14.225.192.183:8000/post/getposts?startIdx=${startIdx}&limit=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((res) => {
         if (res.data.posts.length < 5) setShowMore(false);
         setPosts([...posts, ...res.data.posts]);
@@ -70,7 +73,7 @@ function Search() {
     e.preventDefault();
     axios
       .get(
-        `http://localhost:3001/post/getposts?search=${searchFilter.search}&order=${searchFilter.sort}&category=${searchFilter.category}`,
+        `http://14.225.192.183:8000/post/getposts?search=${searchFilter.search}&order=${searchFilter.sort}&category=${searchFilter.category}`,
         {}
       )
       .then((res) => {
@@ -82,7 +85,7 @@ function Search() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/post/getposts?limit=5")
+      .get("http://14.225.192.183:8000/post/getposts?limit=5")
       .then((res) => {
         console.log(res.data.posts);
         if (res.data.posts.length < 5) setShowMore(false);

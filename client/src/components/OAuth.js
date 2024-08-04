@@ -17,7 +17,7 @@ function OAuth() {
       const result = await signInWithPopup(auth, provider);
       //console.log(result);
       axios
-        .post("http://localhost:3001/oauth", {
+        .post("http://14.225.192.183:8000/oauth", {
           email: result.user.email,
           username: result.user.displayName,
           avatar: result.user.photoURL,

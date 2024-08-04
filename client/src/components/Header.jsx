@@ -26,7 +26,7 @@ function Header() {
   };
 
   const handleSignOut = () => {
-    axios.get("http://localhost:3001/user/signout").then((res) => {
+    axios.get("http://14.225.192.183:8000/user/signout").then((res) => {
       console.log(res.data);
       // Remove token in local storage
       localStorage.removeItem("token");
