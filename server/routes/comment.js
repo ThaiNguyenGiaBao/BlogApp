@@ -99,7 +99,7 @@ route.get("/getcomments", async (req, res) => {
       comments.map(async (comment) => {
         const user = await User.findById(comment.userId);
         if (user) {
-          console.log(user._id);
+          //console.log(user._id);
           return {
             ...comment._doc,
             user: {
@@ -135,7 +135,7 @@ route.get("/:postId", async (req, res) => {
       comments.map(async (comment) => {
         const user = await User.findById(comment.userId);
         if (user) {
-          console.log(user._id);
+         // console.log(user._id);
           return {
             ...comment._doc,
             user: {

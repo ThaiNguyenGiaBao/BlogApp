@@ -51,7 +51,7 @@ route.get("/getposts", async (req, res) => {
       .skip(startIdx)
       .limit(limit);
 
-    console.log(posts);
+    //console.log(posts);
 
     const totalPosts = await Post.countDocuments({});
     const totalPostsLastMonth = await Post.countDocuments({
