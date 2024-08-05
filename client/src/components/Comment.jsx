@@ -18,7 +18,7 @@ function Comment() {
   const handleDelete = (commentId) => {
     console.log(commentId);
     axios
-      .delete(`http://14.225.192.183:8000/comment/delete/${commentId}`, {
+      .delete(`http://14.225.192.183/api/comment/delete/${commentId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -33,7 +33,7 @@ function Comment() {
     const startIdx = comments.length;
     axios
       .get(
-        `http://14.225.192.183:8000/comment/getcomments?start=${startIdx}&limit=5`,
+        `http://14.225.192.183/api/comment/getcomments?start=${startIdx}&limit=5`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -48,7 +48,7 @@ function Comment() {
   };
   useEffect(() => {
     axios
-      .get("http://14.225.192.183:8000/comment/getcomments?limit=5", {
+      .get("http://14.225.192.183/api/comment/getcomments?limit=5", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

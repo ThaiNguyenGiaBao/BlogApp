@@ -1,6 +1,6 @@
 
 ### 
-POST http://14.225.192.183:8000/signin
+POST http://14.225.192.183/api/signin
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### 
-POST http://14.225.192.183:8000/signin
+POST http://14.225.192.183/api/signin
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### Update User
-PUT http://14.225.192.183:8000/user/update/66af42a8b952588244cae653
+PUT http://14.225.192.183/api/user/update/66af42a8b952588244cae653
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YWY0MmE4Yjk1MjU4ODI0NGNhZTY1MyIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMjc4NzAwMH0.jn-JD6hectptGQzVbaq4rcg1xJ-8fDEfdV-n8f_1j-I
 
@@ -30,7 +30,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YWY0MmE4Y
 }
 
 ### Create post
-POST http://14.225.192.183:8000/post/create
+POST http://14.225.192.183/api/post/create
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y2ExZWQyM2QyNGE5ZTRmMCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMTgzMjg1MH0.wqCtnvyf31sSwWbSsp37aXNwTuhAb5SyuQRTn4Zm5io
 
@@ -40,20 +40,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y
 }
 
 ### Get posts
-GET http://14.225.192.183:8000/post/getposts?limit=1&startIdx=0
+GET http://14.225.192.183/api/post/getposts?limit=1&startIdx=0
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y2ExZWQyM2QyNGE5ZTRmMCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMTgzMjg1MH0.wqCtnvyf31sSwWbSsp37aXNwTuhAb5SyuQRTn4Zm5io
 
 ### Get user
-GET http://14.225.192.183:8000/user/getusers
+GET http://14.225.192.183/api/user/getusers
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y2ExZWQyM2QyNGE5ZTRmMCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMTgzMjg1MH0.wqCtnvyf31sSwWbSsp37aXNwTuhAb5SyuQRTn4Zm5io
 
 ### Get post by slug
-GET http://14.225.192.183:8000/post/computer
+GET http://14.225.192.183/api/post/computer
 
 ### Add comment
-POST http://14.225.192.183:8000/comment/addcomment
+POST http://14.225.192.183/api/comment/addcomment
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y2ExZWQyM2QyNGE5ZTRmMCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMTgzMjg1MH0.wqCtnvyf31sSwWbSsp37aXNwTuhAb5SyuQRTn4Zm5io
 
@@ -64,17 +64,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y
 }
 
 ### Get comments
-GET http://14.225.192.183:8000/comment/66a21fc07d0afc4be50f960e
+GET http://14.225.192.183/api/comment/66a21fc07d0afc4be50f960e
 
 
 ### Add comment
-GET "http://14.225.192.183:8000/comment/addcomment",
+GET "http://14.225.192.183/api/comment/addcomment",
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OWZjYjM2Y2ExZWQyM2QyNGE5ZTRmMCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMTgzMjg1MH0.wqCtnvyf31sSwWbSsp37aXNwTuhAb5SyuQRTn4Zm5io
 
 
 ### Update comment
-PUT http://14.225.192.183:8000/comment/update/66a39a98a215a54fb818a987
+PUT http://14.225.192.183/api/comment/update/66a39a98a215a54fb818a987
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTI2N2NkY2FkMWZkMzE3YTkyNzg5MiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcyMTk5OTU0Nn0.SiivbXDWxhEa8LIMI-BRhcxcSOTEsceeY23S9iX_R4w
 
@@ -83,7 +83,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTI2N2NkY
 }
 
 ### Test
-POST http://14.225.192.183:8000/signup
+POST http://14.225.192.183/api/signup
 Content-Type: application/json
 
 {

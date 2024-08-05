@@ -71,7 +71,7 @@ function UpdatePost() {
     const token = localStorage.getItem("token");
     axios
       .put(
-        `http://14.225.192.183:8000/post/update/${id}`,
+        `http://14.225.192.183/api/post/update/${id}`,
         { ...postData, updateAt: new Date() },
         {
           headers: {
@@ -91,7 +91,7 @@ function UpdatePost() {
 
   useEffect(() => {
     axios
-      .get(`http://14.225.192.183:8000/post/getposts?postId=${id}`, {
+      .get(`http://14.225.192.183/api/post/getposts?postId=${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

@@ -8,7 +8,7 @@ function Home() {
   };
   useEffect(() => {
     axios
-      .get("http://14.225.192.183:8000/post/getposts?limit=4")
+      .get("http://14.225.192.183/api/post/getposts?limit=4")
       .then((res) => {
         console.log(res.data);
         setPosts(res.data.posts);

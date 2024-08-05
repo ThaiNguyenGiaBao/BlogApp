@@ -14,7 +14,7 @@ function DashUser() {
   };
   const handleDelete = () => {
     axios
-      .delete(`http://14.225.192.183:8000/user/delete/${deleteId}`, {
+      .delete(`http://14.225.192.183/api/user/delete/${deleteId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -29,7 +29,7 @@ function DashUser() {
 
   useEffect(() => {
     axios
-      .get("http://14.225.192.183:8000/user/getusers", {
+      .get("http://14.225.192.183/api/user/getusers", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -46,7 +46,7 @@ function DashUser() {
     const startIdx = users.length;
     axios
       .get(
-        `http://14.225.192.183:8000/user/getusers?startIdx=${startIdx}&limit=5`,
+        `http://14.225.192.183/api/user/getusers?startIdx=${startIdx}&limit=5`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -116,13 +116,13 @@ function DashUser() {
         </Table.Body>
       </Table>
       {showMore && (
-            <div>
-              <MdOutlineExpandMore
-                onClick={handleShowmore}
-                className="mx-auto hover:cursor-pointer h-10 w-10 text-gray-400 dark:text-gray-200"
-              />
-            </div>
-          )}
+        <div>
+          <MdOutlineExpandMore
+            onClick={handleShowmore}
+            className="mx-auto hover:cursor-pointer h-10 w-10 text-gray-400 dark:text-gray-200"
+          />
+        </div>
+      )}
       <Modal
         show={openModal}
         size="md"

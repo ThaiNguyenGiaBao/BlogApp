@@ -46,7 +46,7 @@ function Post() {
     });
     axios
       .post(
-        "http://14.225.192.183:8000/comment/addcomment",
+        "http://14.225.192.183/api/comment/addcomment",
         {
           postId: post.id,
           content: comment.content,
@@ -61,7 +61,7 @@ function Post() {
       .then((res) => {
         console.log(res.data);
         axios
-          .get(`http://14.225.192.183:8000/comment/${post.id}`)
+          .get(`http://14.225.192.183/api/comment/${post.id}`)
           .then((res) => {
             //console.log(res.data);
             setCommentList(res.data);
@@ -93,7 +93,7 @@ function Post() {
 
     axios
       .put(
-        `http://14.225.192.183:8000/comment/update-likes/${commentId}`,
+        `http://14.225.192.183/api/comment/update-likes/${commentId}`,
         comment,
         {
           headers: {
@@ -109,7 +109,7 @@ function Post() {
   const handleDelete = (commentId) => {
     console.log(commentId);
     axios
-      .delete(`http://14.225.192.183:8000/comment/delete/${commentId}`, {
+      .delete(`http://14.225.192.183/api/comment/delete/${commentId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -155,7 +155,7 @@ function Post() {
   };
   useEffect(() => {
     axios
-      .get(`http://14.225.192.183:8000/post/${slug}`)
+      .get(`http://14.225.192.183/api/post/${slug}`)
       .then((res) => {
         setPost({
           title: res.data.title,
@@ -166,7 +166,7 @@ function Post() {
           id: res.data._id,
         });
         axios
-          .get(`http://14.225.192.183:8000/comment/${res.data._id}`)
+          .get(`http://14.225.192.183/api/comment/${res.data._id}`)
           .then((res) => {
             //console.log(res.data);
             setCommentList(res.data);
@@ -177,7 +177,7 @@ function Post() {
 
     // Get recent articles
     axios
-      .get("http://14.225.192.183:8000/post/getposts?limit=3")
+      .get("http://14.225.192.183/api/post/getposts?limit=3")
       .then((res) => {
         setRecentArticles(res.data.posts);
       })

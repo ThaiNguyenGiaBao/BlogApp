@@ -30,7 +30,7 @@ function SignIn() {
       return dispatch(signInFailure("Please fill all the fields"));
     }
     axios
-      .post("http://14.225.192.183:8000/signin", formData)
+      .post("http://14.225.192.183/api/signin", formData)
       .then((res) => {
         //console.log(res);
         dispatch(signInStart());
