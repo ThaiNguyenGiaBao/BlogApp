@@ -14,7 +14,11 @@ const PORT = process.env.PORT || 8000;
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // Use this after the variable declaration
+app.use(
+  cors({
+    origin: "http://14.225.192.183:3001/",
+  })
+); // Use this after the variable declaration
 app.use(cookies());
 
 mongoose.connect(process.env.DATABASE_URL, {});
