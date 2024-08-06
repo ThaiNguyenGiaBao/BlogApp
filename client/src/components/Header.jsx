@@ -43,26 +43,7 @@ function Header() {
         </span>
         Blog
       </Link>
-      {/* <form onSubmit={handleSearch}>
-        <div className="hidden md:flex py-2 px-3 border rounded-full ">
-          <input
-            placeholder="Search"
-            className="border-none focus:outline-none dark:bg-gray-800"
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            value={search}
-          ></input>
-          
-            <button>
-              <AiOutlineSearch
-                className="text-2xl hover:cursor-pointer"
-                type="submit"
-              />
-            </button>
-          
-        </div>
-      </form> */}
+
       <Link to="/search">
         <AiOutlineSearch
           className="text-4xl hover:cursor-pointer border dark:border-gray-500 rounded-full py-1 w-12"
@@ -101,15 +82,21 @@ function Header() {
       </div>
 
       <Navbar.Collapse>
-        <Navbar.Link active={path === "/"} as={"div"}>
-          <Link to="/">Home</Link>
-        </Navbar.Link>
-        <Navbar.Link active={path === "/projects"} as={"div"}>
-          <Link to="/projects">Projects</Link>
-        </Navbar.Link>
-        <Navbar.Link active={path === "/about"} as={"div"}>
-          <Link to="/about">About me</Link>
-        </Navbar.Link>
+        <Link to="/">
+          <Navbar.Link active={path === "/"} as={"div"}>
+            Home
+          </Navbar.Link>
+        </Link>
+        <Link to="/projects">
+          <Navbar.Link active={path === "/projects"} as={"div"}>
+            Projects
+          </Navbar.Link>
+        </Link>
+        <Link to="/about">
+          <Navbar.Link active={path === "/about"} as={"div"}>
+            About me
+          </Navbar.Link>
+        </Link>
       </Navbar.Collapse>
     </Navbar>
   );
